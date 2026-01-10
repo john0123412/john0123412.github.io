@@ -5,122 +5,102 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jun Johnny 的个人主页</title>
     <style>
-        /* CSS：负责页面的美化 - 这里只能写样式 */
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background-color: #f4f7f6;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
-        .container {
-            background: #fff;
-            width: 90%;
-            max-width: 600px;
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            border-top: 8px solid #3b82f6;
-            margin: 20px auto;
-        }
-        h1 {
-            color: #1e40af;
-            margin-bottom: 10px;
-            font-size: 2.5em;
-        }
-        .subtitle {
-            color: #64748b;
-            font-style: italic;
-            margin-bottom: 30px;
-        }
-        .section {
-            margin-bottom: 25px;
-        }
-        h2 {
-            border-bottom: 2px solid #e2e8f0;
-            padding-bottom: 5px;
-            color: #334155;
-        }
-        ul {
-            list-style-type: "🚀 ";
-            padding-left: 20px;
-        }
-        li {
-            margin-bottom: 10px;
-        }
-        .highlight {
-            background-color: #dbeafe;
-            color: #1e40af;
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-weight: bold;
-        }
-        footer {
-            margin-top: 40px;
-            text-align: center;
-            font-size: 0.9em;
-            color: #94a3b8;
-        }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; line-height: 1.6; color: #333; background-color: #f0f4f8; margin: 0; display: flex; justify-content: center; min-height: 100vh; }
+        .container { background: #fff; width: 90%; max-width: 700px; padding: 30px; margin: 20px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border-top: 8px solid #3b82f6; }
+        h1, h2 { color: #1e40af; }
+        .section { margin-bottom: 30px; }
+        .highlight { background-color: #dbeafe; color: #1e40af; padding: 2px 8px; border-radius: 4px; font-weight: bold; }
+        
+        /* 项目列表样式 */
+        .repo-card { border: 1px solid #e2e8f0; padding: 15px; border-radius: 10px; margin-bottom: 10px; transition: 0.3s; }
+        .repo-card:hover { border-color: #3b82f6; background: #f8fafc; }
+        .repo-link { font-weight: bold; color: #3b82f6; text-decoration: none; font-size: 1.1em; }
+        
+        /* 留言板样式 */
+        .msg-form { display: flex; flex-direction: column; gap: 10px; background: #f8fafc; padding: 20px; border-radius: 10px; }
+        input, textarea { padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; }
+        button { background: #3b82f6; color: white; border: none; padding: 10px; border-radius: 6px; cursor: pointer; font-weight: bold; }
+        button:hover { background: #1d4ed8; }
+        .msg-list { margin-top: 20px; max-height: 300px; overflow-y: auto; border-top: 1px solid #eee; padding-top: 10px; }
+        .msg-item { font-size: 0.9em; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px dashed #eee; }
+        .msg-name { font-weight: bold; color: #1e40af; }
+        .msg-time { font-size: 0.8em; color: #94a3b8; margin-left: 10px; }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <header>
-            <h1>Hello, Jun Johnny!</h1>
-            <p class="subtitle">"My Python and CS journey starts here."</p>
-        </header>
+        <h1>Hello, Jun Johnny!</h1>
+        <p>计算机科学探索中 | <span id="click-total" class="highlight">...</span> 次跳转</p>
 
-        <main>
-            <div class="section">
-                <h2>关于我 (About Me)</h2>
-                <p>你好！我是 <span class="highlight">Jun Johnny</span>。我目前是一名计算机专业的学生，正在努力探索编程的世界。</p>
+        <div class="section">
+            <h2>GitHub 仓库 (Repositories)</h2>
+            <div class="repo-card">
+                <a href="https://go.junjohnny.me/git" target="_blank" class="repo-link">📦 Python_Algorithms</a>
+                <p>记录我的算法刷题与数据结构实现。 [go.junjohnny.me/git]</p>
             </div>
-
-            <div class="section">
-                <h2>技能树 (Tech Stack)</h2>
-                <ul>
-                    <li><strong>Python:</strong> 正在学习算法与数据结构。</li>
-                    <li><strong>前端:</strong> 刚开启 HTML/CSS 的学习之旅。</li>
-                    <li><strong>其他:</strong> 对计算机硬件和网络配置也很感兴趣。</li>
-                </ul>
+            <div class="repo-card">
+                <a href="https://go.junjohnny.me/intro" target="_blank" class="repo-link">🌐 Personal_Website</a>
+                <p>本页面的源代码及 Cloudflare Worker 配置。</p>
             </div>
+        </div>
 
-            <div class="section">
-                <h2>我的目标 (Goal)</h2>
-                <p>在大学期间，我希望能在 <span class="highlight">人工智能 (AI)</span> 和网络技术领域有所突破。</p>
+        <div class="section">
+            <h2>留言板 (Guestbook)</h2>
+            <div class="msg-form">
+                <input type="text" id="u-name" placeholder="你的名字 (一旦输入不可更改)" required>
+                <textarea id="u-content" placeholder="想对我说什么？" rows="3" required></textarea>
+                <button onclick="postMessage()">发送留言</button>
             </div>
+            <div id="msg-display" class="msg-list">加载留言中...</div>
+        </div>
 
-            <div class="section">
-                <h2>站点统计 (Site Stats)</h2>
-                <p>我的跳转链接已被点击了 <span id="click-count" class="highlight">加载中...</span> 次</p>
-            </div>
-        </main>
-
-        <footer>
-            <p>© 2026 Jun Johnny | 用代码连接世界</p>
-        </footer>
+        <footer>© 2026 Jun Johnny</footer>
     </div>
 
     <script>
-        const statsUrl = "https://go.junjohnny.me/"; 
+        const API = "https://go.junjohnny.me/api/messages";
 
-        async function getStats() {
+        // 获取数据
+        async function loadData() {
             try {
-                const response = await fetch(statsUrl);
-                const data = await response.json(); // 直接解析 JSON
-                document.getElementById('click-count').innerText = data.clicks;
-            } catch (error) {
-                console.error("数据加载失败:", error);
-                document.getElementById('click-count').innerText = "暂无数据";
-            }
+                const res = await fetch(API);
+                const data = await res.json();
+                document.getElementById('click-total').innerText = data.clicks;
+                
+                const list = document.getElementById('msg-display');
+                list.innerHTML = data.messages.reverse().map(m => `
+                    <div class="msg-item">
+                        <span class="msg-name">${m.name}</span>
+                        <span class="msg-time">${m.time}</span>
+                        <p style="margin: 5px 0 0 0;">${m.content}</p>
+                    </div>
+                `).join('') || "暂无留言";
+            } catch (e) { console.error(e); }
         }
-        getStats();
+
+        // 提交留言
+        async function postMessage() {
+            const name = document.getElementById('u-name').value;
+            const content = document.getElementById('u-content').value;
+            if(!name || !content) return alert("请填写完整");
+
+            try {
+                const res = await fetch(API, {
+                    method: 'POST',
+                    body: JSON.stringify({ name, content })
+                });
+                const result = await res.json();
+                if(result.error) alert(result.error);
+                else {
+                    alert("留言成功！");
+                    document.getElementById('u-content').value = "";
+                    loadData();
+                }
+            } catch (e) { alert("提交失败，请检查网络"); }
+        }
+
+        window.onload = loadData;
     </script>
 </body>
 </html>
