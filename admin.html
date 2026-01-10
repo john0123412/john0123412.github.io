@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>Jun Johnny - 管理面板</title>
+    <style>
+        body { font-family: system-ui; padding: 40px; background: #f1f5f9; }
+        .admin-card { background: white; max-width: 800px; margin: 0 auto; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); }
+        .login-box { text-align: center; padding: 40px; }
+        .hidden { display: none; }
+        input { padding: 8px; margin: 10px; border: 1px solid #ddd; border-radius: 4px; }
+        button { padding: 8px 16px; cursor: pointer; border-radius: 4px; border: none; background: #3b82f6; color: white; }
+        .msg-item { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #eee; }
+        .btn-del { background: #ef4444; font-size: 12px; }
+        .btn-clear { background: #1e293b; margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+
+<div class="admin-card">
+    <div id="login-ui" class="login-box">
+        <h2>管理员登录</h2>
+        <input type="password" id="admin-pw" placeholder="输入管理密码">
+        <button onclick="login()">进入系统</button>
+    </div>
+
+    <div id="manage-ui" class="hidden">
+        <h2>留言管理控制台</h2>
+        <button class="btn-clear" onclick="execute('clear_all')">清空所有留言与IP绑定</button>
+        <div id="msg-list"></div>
+    </div>
+</div>
+
+<script>
+    let currentPassword = "";
+    const API_URL = "https://go.junjohnny.me/api/messages";
+    const ADMIN_URL = "https://go.junjohnny.me/api/admin/manage";
+
+    function login() {
+        currentPassword = document.getElementById('admin-pw').value;
+        loadMessages();
+    }
+
+    async function loadMessages() {
+        const res = await fetch(API_URL);
+        const data = await res.json();
+        
+        document.getElementById('login-ui').classList.add('hidden');
+        document.getElementById('manage-ui').classList.remove('hidden');
+        
+        const list = document.getElementById('msg-list');
+        list.innerHTML = data.messages.map((m, i) => `
+            <div class="msg-item">
+                <span><strong>${m.name}</strong>: ${m.content} <small>(${m.time})</small></span>
+                <button class="btn-del" onclick="execute('delete', ${i})">删除</button>
+            </div>
+        `).join('');
+    }
+
+    async function execute(action, index = null) {
+        if (!confirm(`确定要执行 ${action} 吗？`)) return;
+
+        try {
+            const res = await fetch(ADMIN_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Admin-Token': currentPassword // 密码放在自定义 Header 中
+                },
+                body: JSON.stringify({ action, index })
+            });
+
+            const result = await res.json();
+            if (result.success) {
+                alert(result.success);
+                loadMessages();
+            } else {
+                alert("操作失败：" + result.error);
+            }
+        } catch (e) {
+            alert("请求出错，请检查密码或网络");
+        }
+    }
+</script>
+</body>
+</html>
