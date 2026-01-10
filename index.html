@@ -112,18 +112,11 @@
 
         async function getStats() {
             try {
-                // 加上 mode: 'cors' 确保跨域请求正常
-                const response = await fetch(statsUrl, { mode: 'cors' });
-                const text = await response.text();
-                // 匹配我们在 Worker 里写的 <strong>数字</strong>
-                const match = text.match(/(\d+)<\/strong>/);
-                if (match) {
-                    document.getElementById('click-count').innerText = match[1];
-                } else {
-                    document.getElementById('click-count').innerText = "0";
-                }
+                const response = await fetch(statsUrl);
+                const data = await response.json(); // 直接解析 JSON
+                document.getElementById('click-count').innerText = data.clicks;
             } catch (error) {
-                console.error("获取统计失败:", error);
+                console.error("数据加载失败:", error);
                 document.getElementById('click-count').innerText = "暂无数据";
             }
         }
