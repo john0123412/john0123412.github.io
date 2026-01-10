@@ -3,90 +3,109 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jun Johnny - 管理面板</title>
+    <title>Jun Johnny - Admin Panel</title>
     <style>
-        body { font-family: 'Segoe UI', system-ui, sans-serif; background: #f8fafc; color: #1e293b; padding: 20px; }
-        .card { background: white; max-width: 600px; margin: 20px auto; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        body { font-family: monospace; background: #111; color: #0f0; padding: 20px; }
+        .container { max-width: 600px; margin: 0 auto; }
+        input, button { width: 100%; padding: 10px; margin-bottom: 10px; background: #222; border: 1px solid #444; color: #fff; }
+        button { cursor: pointer; font-weight: bold; }
+        button:hover { background: #333; }
         .hidden { display: none; }
-        input, button { padding: 12px; border-radius: 6px; border: 1px solid #ddd; width: 100%; box-sizing: border-box; margin-bottom: 10px; }
-        button { background: #3b82f6; color: white; border: none; font-weight: bold; cursor: pointer; }
-        button:hover { background: #1d4ed8; }
-        .msg-item { background: #f1f5f9; padding: 10px; border-radius: 6px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; font-size: 14px; }
-        .btn-del { background: #ef4444; width: auto; padding: 6px 12px; font-size: 12px; margin: 0; }
-        .btn-clear { background: #0f172a; margin-top: 20px; }
+        .log-box { background: #000; border: 1px dashed #333; padding: 10px; max-height: 300px; overflow-y: auto; margin-bottom: 20px; }
+        .log-item { border-bottom: 1px solid #222; padding: 5px 0; font-size: 12px; }
+        .ip { color: #f0f; } .time { color: #ff0; }
+        .msg-item { background: #222; padding: 10px; margin-bottom: 5px; display: flex; justify-content: space-between; }
+        .del-btn { width: auto; background: #f00; border: none; padding: 5px 10px; }
     </style>
 </head>
 <body>
 
-<div class="card">
-    <div id="login-section">
-        <h2 style="text-align: center;">🔐 管理员登录</h2>
-        <input type="password" id="pw-input" placeholder="输入原始管理密码">
-        <button onclick="handleLogin()">进入管理系统</button>
+<div class="container">
+    <div id="login-view">
+        <h2>🔒 SYSTEM ACCESS</h2>
+        <input type="password" id="pw" placeholder="Enter Password">
+        <button onclick="login()">AUTHENTICATE</button>
     </div>
 
-    <div id="admin-section" class="hidden">
-        <h2>留言管理</h2>
-        <div id="msg-container">加载中...</div>
-        <button class="btn-clear" onclick="runAction('clear_all')">清空所有数据 (慎用)</button>
+    <div id="admin-view" class="hidden">
+        <h2>📊 TRAFFIC MONITOR</h2>
+        <button onclick="loadStats()">REFRESH LOGS</button>
+        <div id="traffic-log" class="log-box">Waiting for data...</div>
+
+        <h2>📝 MESSAGE CONTROL</h2>
+        <div id="msg-list">Loading...</div>
+        <button onclick="clearAll()" style="background: #500; margin-top:20px;">⚠ PURGE ALL DATA</button>
     </div>
 </div>
 
 <script>
-    const API_BASE = "https://go.junjohnny.me/api/messages";
-    const ADMIN_API = "https://go.junjohnny.me/api/admin/manage";
-    let hashedPw = "";
+    const API_MSG = "https://go.junjohnny.me/api/messages";
+    const API_STATS = "https://go.junjohnny.me/api/admin/stats";
+    const API_MANAGE = "https://go.junjohnny.me/api/admin/manage";
+    let token = "";
 
-    // 【核心】SubtleCrypto SHA-256 加密函数
-    async function calcHash(text) {
-        const msgUint8 = new TextEncoder().encode(text);
-        const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
-        return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
+    async function sha256(str) {
+        const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(str));
+        return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
     }
 
-    async function handleLogin() {
-        const raw = document.getElementById('pw-input').value;
-        if(!raw) return alert("请输入密码");
-        hashedPw = await calcHash(raw);
-        refreshList();
+    async function login() {
+        const pw = document.getElementById('pw').value;
+        if(!pw) return;
+        token = await sha256(pw);
+        loadMsgs();
+        loadStats();
     }
 
-    async function refreshList() {
+    async function loadStats() {
         try {
-            const res = await fetch(API_BASE);
+            const res = await fetch(API_STATS, { headers: { 'X-Admin-Token': token } });
+            if(res.status === 401) return alert("Wrong Password");
             const data = await res.json();
-            document.getElementById('login-section').classList.add('hidden');
-            document.getElementById('admin-section').classList.remove('hidden');
             
-            const container = document.getElementById('msg-container');
-            container.innerHTML = data.messages.map((m, i) => `
-                <div class="msg-item">
-                    <span><strong>${m.name}</strong>: ${m.content}</span>
-                    <button class="btn-del" onclick="runAction('delete', ${i})">删除</button>
+            document.getElementById('login-view').classList.add('hidden');
+            document.getElementById('admin-view').classList.remove('hidden');
+
+            let html = `<div>DATE: ${data.date} | TODAY: ${data.today} | TOTAL: ${data.total}</div><br>`;
+            html += data.logs.map(l => `
+                <div class="log-item">
+                    <span class="time">[${l.time.split(' ')[1]}]</span> 
+                    <span class="ip">IP: ${l.ip}</span>
                 </div>
-            `).join('') || "当前无留言";
-        } catch(e) { alert("登录失败或网络错误"); }
+            `).join('');
+            document.getElementById('traffic-log').innerHTML = html;
+        } catch(e) { console.error(e); }
     }
 
-    async function runAction(action, index = null) {
-        if(!confirm(`确定执行: ${action}？`)) return;
+    async function loadMsgs() {
+        const res = await fetch(API_MSG);
+        const data = await res.json();
+        document.getElementById('msg-list').innerHTML = data.messages.map((m, i) => `
+            <div class="msg-item">
+                <span>${m.name}: ${m.content}</span>
+                <button class="del-btn" onclick="del(${i})">DEL</button>
+            </div>
+        `).join('');
+    }
 
-        const res = await fetch(ADMIN_API, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-Admin-Token': hashedPw
-            },
-            body: JSON.stringify({ action, index })
+    async function del(index) {
+        if(!confirm("Delete?")) return;
+        await fetch(API_MANAGE, { 
+            method: 'POST', 
+            headers: { 'X-Admin-Token': token },
+            body: JSON.stringify({ action: 'delete', index }) 
         });
-
-        const result = await res.json();
-        if(result.success) {
-            alert(result.success);
-            refreshList();
-        } else {
-            alert("操作失败: " + result.error);
-        }
+        loadMsgs();
+    }
+    
+    async function clearAll() {
+        if(!confirm("DELETE EVERYTHING?")) return;
+        await fetch(API_MANAGE, { 
+            method: 'POST', 
+            headers: { 'X-Admin-Token': token },
+            body: JSON.stringify({ action: 'clear_all' }) 
+        });
+        loadMsgs(); loadStats();
     }
 </script>
 </body>
