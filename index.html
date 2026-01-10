@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Jun Johnny - Personal Portfolio</title>
+    <title>Jun - Personal Portfolio</title>
     <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
     <style>
         :root {
@@ -19,9 +19,18 @@
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg-color); color: var(--text-main); margin: 0; padding: 0; display: flex; justify-content: center; transition: background 0.3s; }
         .container { width: 100%; max-width: 800px; padding: 20px; margin-bottom: 40px; }
-        header { display: flex; justify-content: space-between; margin: 20px 0 30px 0; }
+        
+        header { display: flex; justify-content: space-between; align-items: flex-start; margin: 20px 0 30px 0; }
         .profile h1 { margin: 0; font-size: 1.8rem; color: var(--accent); }
         .profile p { margin: 5px 0; color: var(--text-sub); font-size: 0.9rem; }
+        
+        /* 恢复的徽标样式 */
+        .stats-badge {
+            display: inline-block; background: var(--accent-soft); color: var(--accent);
+            padding: 5px 12px; border-radius: 20px; font-weight: bold; font-size: 0.85rem;
+            margin-top: 8px;
+        }
+
         .theme-btn { background: var(--card-bg); border: 1px solid var(--border); width: 40px; height: 40px; border-radius: 10px; font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: center; }
         .card { background: var(--card-bg); border-radius: 16px; padding: 20px; margin-bottom: 20px; border: 1px solid var(--border); box-shadow: var(--shadow); }
         h2 { font-size: 1.2rem; margin: 0 0 15px 0; display: flex; flex-direction: column; }
@@ -48,8 +57,9 @@
 <div class="container">
     <header>
         <div class="profile">
-            <h1>Jun Johnny</h1>
+            <h1>Jun</h1>
             <p>CS Student & Python Developer | 计算机科学在读</p>
+            <div class="stats-badge">🚀 Total Visits: <span id="header-total">...</span></div>
         </div>
         <button class="theme-btn" id="theme-btn" onclick="toggleTheme()">🌙</button>
     </header>
@@ -115,10 +125,14 @@
         try {
             const res = await fetch(API);
             const data = await res.json();
+            
+            // 同时更新顶部徽标和底部统计
             if(data.stats) {
+                document.getElementById('header-total').innerText = data.stats.total;
                 document.getElementById('uv-today').innerText = data.stats.today;
                 document.getElementById('uv-total').innerText = data.stats.total;
             }
+
             const list = document.getElementById('msg-display');
             list.innerHTML = data.messages.reverse().slice(0, 8).map(m => `
                 <div class="msg"><b>${m.name}</b><span>${m.time}</span><div style="margin-top:4px;">${m.content}</div></div>
@@ -129,7 +143,7 @@
     async function postMsg() {
         const name = document.getElementById('u-name').value;
         const content = document.getElementById('u-content').value;
-        const token = turnstile.getResponse(); // 获取验证码 Token
+        const token = turnstile.getResponse();
 
         if(!name || !content) return alert("Please fill all fields");
         if(!token) return alert("Please complete verification / 请完成人机验证");
@@ -137,7 +151,7 @@
         try {
             const res = await fetch(API, { 
                 method: 'POST', 
-                body: JSON.stringify({ name, content, token }) // 发送 Token
+                body: JSON.stringify({ name, content, token }) 
             });
             const result = await res.json();
             
