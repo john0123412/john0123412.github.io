@@ -3,295 +3,157 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Jun - Personal Portfolio</title>
+    <title>Jun Johnny - Personal Portfolio</title>
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
     <style>
-        /* 1. 变量定义：支持暗黑模式切换 */
         :root {
-            --bg-color: #f8fafc;
-            --card-bg: #ffffff;
-            --text-main: #1e293b;
-            --text-sub: #64748b;
-            --accent: #3b82f6;
-            --accent-soft: #dbeafe;
-            --border: #e2e8f0;
-            --btn-hover: #1d4ed8;
-            --shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+            --bg-color: #f8fafc; --card-bg: #ffffff; --text-main: #1e293b; --text-sub: #64748b;
+            --accent: #3b82f6; --accent-soft: #dbeafe; --border: #e2e8f0; --btn-hover: #1d4ed8;
+            --shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
         }
-
         [data-theme="dark"] {
-            --bg-color: #0f172a;
-            --card-bg: #1e293b;
-            --text-main: #f1f5f9;
-            --text-sub: #94a3b8;
-            --accent: #60a5fa;
-            --accent-soft: #1e3a8a;
-            --border: #334155;
-            --btn-hover: #3b82f6;
+            --bg-color: #0f172a; --card-bg: #1e293b; --text-main: #f1f5f9; --text-sub: #94a3b8;
+            --accent: #60a5fa; --accent-soft: #1e3a8a; --border: #334155; --btn-hover: #3b82f6;
             --shadow: 0 10px 15px -3px rgba(0,0,0,0.3);
         }
-
-        /* 2. 基础响应式布局 */
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        
-        body {
-            font-family: 'Inter', -apple-system, system-ui, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            transition: background-color 0.3s ease;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 800px;
-            padding: 20px;
-            margin-bottom: 40px;
-        }
-
-        /* 3. 头部设计 */
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin: 20px 0 40px 0;
-        }
-
-        .profile-info h1 { margin: 0; font-size: 2rem; color: var(--accent); }
-        .profile-info p { margin: 5px 0; color: var(--text-sub); }
-
-        .theme-toggle {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            color: var(--text-main);
-            width: 44px;
-            height: 44px;
-            border-radius: 12px;
-            cursor: pointer;
-            font-size: 1.2rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: var(--shadow);
-        }
-
-        /* 4. 卡片与网格布局 (自动适配) */
-        .section-card {
-            background: var(--card-bg);
-            border-radius: 16px;
-            padding: 24px;
-            margin-bottom: 24px;
-            border: 1px solid var(--border);
-            box-shadow: var(--shadow);
-        }
-
-        h2 { font-size: 1.25rem; margin: 0 0 20px 0; display: flex; flex-direction: column; }
-        h2 span { font-size: 0.85rem; color: var(--text-sub); font-weight: normal; margin-top: 4px; }
-
-        /* LeetCode 链接网格：桌面 2 列，移动端 1 列 */
-        .link-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 16px;
-        }
-
-        .link-card {
-            display: block;
-            text-decoration: none;
-            background: var(--bg-color);
-            padding: 16px;
-            border-radius: 12px;
-            border: 1px solid transparent;
-            transition: all 0.2s ease;
-        }
-
-        .link-card:hover { transform: translateY(-3px); border-color: var(--accent); }
-        .link-card strong { color: var(--accent); display: block; margin-bottom: 4px; }
-        .link-card small { color: var(--text-sub); font-size: 0.8rem; word-break: break-all; }
-
-        /* 5. 留言板与统计 */
-        .stats-tag {
-            background: var(--accent-soft);
-            color: var(--accent);
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-weight: bold;
-            display: inline-block;
-            margin-bottom: 20px;
-        }
-
-        .form-group { display: flex; flex-direction: column; gap: 12px; }
-        input, textarea {
-            width: 100%;
-            background: var(--bg-color);
-            color: var(--text-main);
-            border: 1px solid var(--border);
-            padding: 14px;
-            border-radius: 10px;
-            font-size: 1rem;
-        }
-
-        .submit-btn {
-            background: var(--accent);
-            color: white;
-            border: none;
-            padding: 14px;
-            border-radius: 10px;
-            font-weight: bold;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-        .submit-btn:hover { background: var(--btn-hover); }
-
-        .msg-list { margin-top: 20px; border-top: 1px solid var(--border); }
-        .msg-item { padding: 16px 0; border-bottom: 1px dashed var(--border); }
-        .msg-header { display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 6px; }
-        .msg-name { color: var(--accent); font-weight: bold; }
-        .msg-time { color: var(--text-sub); }
-
-        footer { text-align: center; padding: 40px 0; color: var(--text-sub); font-size: 0.85rem; }
-
-        /* 6. 移动端微调 */
-        @media (max-width: 480px) {
-            .container { padding: 15px; }
-            .section-card { padding: 20px; }
-            .profile-info h1 { font-size: 1.75rem; }
-        }
+        body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg-color); color: var(--text-main); margin: 0; padding: 0; display: flex; justify-content: center; transition: background 0.3s; }
+        .container { width: 100%; max-width: 800px; padding: 20px; margin-bottom: 40px; }
+        header { display: flex; justify-content: space-between; margin: 20px 0 30px 0; }
+        .profile h1 { margin: 0; font-size: 1.8rem; color: var(--accent); }
+        .profile p { margin: 5px 0; color: var(--text-sub); font-size: 0.9rem; }
+        .theme-btn { background: var(--card-bg); border: 1px solid var(--border); width: 40px; height: 40px; border-radius: 10px; font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .card { background: var(--card-bg); border-radius: 16px; padding: 20px; margin-bottom: 20px; border: 1px solid var(--border); box-shadow: var(--shadow); }
+        h2 { font-size: 1.2rem; margin: 0 0 15px 0; display: flex; flex-direction: column; }
+        h2 span { font-size: 0.8rem; color: var(--text-sub); font-weight: normal; margin-top: 2px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; }
+        .link-box { text-decoration: none; background: var(--bg-color); padding: 15px; border-radius: 10px; border: 1px solid transparent; transition: 0.2s; }
+        .link-box:hover { border-color: var(--accent); transform: translateY(-2px); }
+        .link-box strong { display: block; color: var(--accent); margin-bottom: 4px; }
+        .link-box small { color: var(--text-sub); font-size: 0.8rem; }
+        .input-group { display: flex; flex-direction: column; gap: 10px; }
+        input, textarea { background: var(--bg-color); color: var(--text-main); border: 1px solid var(--border); padding: 12px; border-radius: 8px; font-size: 1rem; }
+        .btn-submit { background: var(--accent); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; }
+        .msg-list { margin-top: 15px; border-top: 1px solid var(--border); }
+        .msg { padding: 12px 0; border-bottom: 1px dashed var(--border); font-size: 0.9rem; }
+        .msg b { color: var(--text-main); }
+        .msg span { color: var(--text-sub); font-size: 0.8rem; margin-left: 5px; }
+        footer { margin-top: 40px; text-align: center; }
+        .visit-stats { color: var(--text-sub); opacity: 0.7; font-family: monospace; font-size: 0.8rem; margin-bottom: 5px; }
+        .copyright { color: var(--text-sub); font-size: 0.8rem; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <header>
-        <div class="profile-info">
-            <h1>Jun</h1>
-            <p>Python Developer & CS Explorer</p>
-            <p>计算机科学 / 算法探索者</p>
+        <div class="profile">
+            <h1>Jun Johnny</h1>
+            <p>CS Student & Python Developer | 计算机科学在读</p>
         </div>
-        <button class="theme-toggle" id="theme-btn" onclick="toggleTheme()">🌙</button>
+        <button class="theme-btn" id="theme-btn" onclick="toggleTheme()">🌙</button>
     </header>
 
     <main>
-        <div class="stats-tag">
-            📊 Total Clicks / 跳转统计: <span id="click-total">...</span>
-        </div>
-
-        <div class="section-card">
+        <div class="card">
             <h2>Python_Algorithms <span>算法与数据结构练习 / Algorithm Practice</span></h2>
-            <div class="link-grid">
-                <a href="https://leetcode.cn/u/john0123412/" target="_blank" class="link-card">
-                    <strong>🇨🇳 LeetCode CN (国内地址)</strong>
+            <div class="grid">
+                <a href="https://leetcode.cn/u/john0123412/" target="_blank" class="link-box">
+                    <strong>🇨🇳 LeetCode CN (国内)</strong>
                     <small>leetcode.cn/u/john0123412/</small>
                 </a>
-                <a href="https://leetcode.com/u/john0123412/" target="_blank" class="link-card">
-                    <strong>🌎 LeetCode Global (国外地址)</strong>
+                <a href="https://leetcode.com/u/john0123412/" target="_blank" class="link-box">
+                    <strong>🌎 LeetCode Global (国外)</strong>
                     <small>leetcode.com/u/john0123412/</small>
                 </a>
             </div>
         </div>
 
-        <div class="section-card">
+        <div class="card">
             <h2>GitHub Repositories <span>GitHub 仓库地址</span></h2>
-            <div class="link-grid" style="grid-template-columns: 1fr;">
-                <a href="https://github.com/john0123412" target="_blank" class="link-card" style="border-left: 4px solid var(--accent);">
+            <div class="grid" style="grid-template-columns: 1fr;">
+                <a href="https://github.com/john0123412" target="_blank" class="link-box" style="border-left: 4px solid var(--accent);">
                     <strong>📦 My GitHub Profile</strong>
-                    <small>Explore my open source journey and code samples.</small>
-                    <br><small>https://github.com/john0123412</small>
+                    <small>https://github.com/john0123412</small>
                 </a>
             </div>
         </div>
 
-        <div class="section-card">
+        <div class="card">
             <h2>Guestbook <span>留言板</span></h2>
-            <div class="form-group">
-                <input type="text" id="u-name" placeholder="Your Name / 你的名字">
-                <textarea id="u-content" placeholder="Leave a message... / 留言内容..." rows="3"></textarea>
-                <button class="submit-btn" onclick="postMessage()">Submit / 提交留言</button>
+            <div class="input-group">
+                <input type="text" id="u-name" placeholder="Name / 名字">
+                <textarea id="u-content" rows="2" placeholder="Message / 内容..."></textarea>
+                
+                <div class="cf-turnstile" data-sitekey="0x4AAAAAACLsslhK4knoP_OA" data-theme="auto"></div>
+
+                <button class="btn-submit" onclick="postMsg()">Submit / 提交</button>
             </div>
-            <div id="msg-display" class="msg-list">
-                <p style="text-align: center; color: var(--text-sub);">Loading messages...</p>
-            </div>
+            <div id="msg-display" class="msg-list">Loading...</div>
         </div>
     </main>
 
     <footer>
-        <p>© 2026 Jun Johnny | Optimized for Mobile & Desktop</p>
+        <div class="visit-stats">Today: <span id="uv-today">...</span> | Total: <span id="uv-total">...</span></div>
+        <div class="copyright">© 2026 Jun Johnny | Optimized for Mobile & Desktop</div>
     </footer>
 </div>
 
 <script>
-    // --- 1. 暗黑模式管理 ---
     function toggleTheme() {
         const doc = document.documentElement;
-        const btn = document.getElementById('theme-btn');
-        if (doc.getAttribute('data-theme') === 'dark') {
-            doc.removeAttribute('data-theme');
-            btn.innerText = '🌙';
-            localStorage.setItem('theme', 'light');
-        } else {
-            doc.setAttribute('data-theme', 'dark');
-            btn.innerText = '☀️';
-            localStorage.setItem('theme', 'dark');
-        }
+        const isDark = doc.getAttribute('data-theme') === 'dark';
+        doc.setAttribute('data-theme', isDark ? '' : 'dark');
+        document.getElementById('theme-btn').innerText = isDark ? '🌙' : '☀️';
+        localStorage.setItem('theme', isDark ? 'light' : 'dark');
     }
-    // 初始化主题
-    if (localStorage.getItem('theme') === 'dark') {
-        document.documentElement.setAttribute('data-theme', 'dark');
-        document.getElementById('theme-btn').innerText = '☀️';
-    }
+    if (localStorage.getItem('theme') === 'dark') toggleTheme();
 
-    // --- 2. 后端 API 交互 ---
     const API = "https://go.junjohnny.me/api/messages";
 
-    async function loadContent() {
+    async function loadData() {
         try {
             const res = await fetch(API);
             const data = await res.json();
-            
-            // 更新点击数
-            document.getElementById('click-total').innerText = data.clicks;
-            
-            // 渲染留言 (限制显示最近 8 条)
+            if(data.stats) {
+                document.getElementById('uv-today').innerText = data.stats.today;
+                document.getElementById('uv-total').innerText = data.stats.total;
+            }
             const list = document.getElementById('msg-display');
             list.innerHTML = data.messages.reverse().slice(0, 8).map(m => `
-                <div class="msg-item">
-                    <div class="msg-header">
-                        <span class="msg-name">${m.name}</span>
-                        <span class="msg-time">${m.time}</span>
-                    </div>
-                    <div class="msg-body">${m.content}</div>
-                </div>
-            `).join('') || "<p style='text-align:center; padding:20px;'>No messages yet.</p>";
-        } catch (e) {
-            document.getElementById('msg-display').innerHTML = "<p style='color:red;'>Failed to load data.</p>";
-        }
+                <div class="msg"><b>${m.name}</b><span>${m.time}</span><div style="margin-top:4px;">${m.content}</div></div>
+            `).join('') || "<p style='text-align:center'>No messages yet.</p>";
+        } catch(e) {}
     }
 
-    async function postMessage() {
+    async function postMsg() {
         const name = document.getElementById('u-name').value;
         const content = document.getElementById('u-content').value;
-        if(!name || !content) return alert("Please complete the form / 请填写完整内容");
+        const token = turnstile.getResponse(); // 获取验证码 Token
+
+        if(!name || !content) return alert("Please fill all fields");
+        if(!token) return alert("Please complete verification / 请完成人机验证");
 
         try {
-            const res = await fetch(API, {
-                method: 'POST',
-                body: JSON.stringify({ name, content })
+            const res = await fetch(API, { 
+                method: 'POST', 
+                body: JSON.stringify({ name, content, token }) // 发送 Token
             });
             const result = await res.json();
-            if(result.error) alert(result.error);
-            else {
+            
+            if(result.error) {
+                alert(result.error);
+                turnstile.reset();
+            } else {
                 document.getElementById('u-content').value = "";
-                loadContent();
-                alert("Success! / 留言成功！");
+                turnstile.reset();
+                loadData();
+                alert("Success!");
             }
-        } catch (e) { alert("Network error / 网络错误"); }
+        } catch (e) { alert("Network error"); }
     }
 
-    // 初始加载
-    window.onload = loadContent;
+    window.onload = loadData;
 </script>
 </body>
 </html>
