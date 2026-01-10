@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Jun - Personal Portfolio</title>
+    <title>Jun Johnny - Personal Portfolio</title>
     <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
     <style>
         :root {
@@ -24,7 +24,7 @@
         .profile h1 { margin: 0; font-size: 1.8rem; color: var(--accent); }
         .profile p { margin: 5px 0; color: var(--text-sub); font-size: 0.9rem; }
         
-        /* 恢复的徽标样式 */
+        /* 顶部徽标样式 */
         .stats-badge {
             display: inline-block; background: var(--accent-soft); color: var(--accent);
             padding: 5px 12px; border-radius: 20px; font-weight: bold; font-size: 0.85rem;
@@ -47,8 +47,10 @@
         .msg { padding: 12px 0; border-bottom: 1px dashed var(--border); font-size: 0.9rem; }
         .msg b { color: var(--text-main); }
         .msg span { color: var(--text-sub); font-size: 0.8rem; margin-left: 5px; }
+        
         footer { margin-top: 40px; text-align: center; }
-        .visit-stats { color: var(--text-sub); opacity: 0.7; font-family: monospace; font-size: 0.8rem; margin-bottom: 5px; }
+        /* 底部淡色统计样式 */
+        .visit-stats { color: var(--text-sub); opacity: 0.6; font-family: monospace; font-size: 0.8rem; margin-bottom: 6px; }
         .copyright { color: var(--text-sub); font-size: 0.8rem; }
     </style>
 </head>
@@ -57,9 +59,9 @@
 <div class="container">
     <header>
         <div class="profile">
-            <h1>Jun</h1>
+            <h1>Jun Johnny</h1>
             <p>CS Student & Python Developer | 计算机科学在读</p>
-            <div class="stats-badge">🚀 Total Visits: <span id="header-total">...</span></div>
+            <div class="stats-badge">🚀 Link Clicks: <span id="header-clicks">...</span></div>
         </div>
         <button class="theme-btn" id="theme-btn" onclick="toggleTheme()">🌙</button>
     </header>
@@ -104,7 +106,7 @@
     </main>
 
     <footer>
-        <div class="visit-stats">Today: <span id="uv-today">...</span> | Total: <span id="uv-total">...</span></div>
+        <div class="visit-stats">Daily Visits: <span id="uv-today">...</span> | Total Visits: <span id="uv-total">...</span></div>
         <div class="copyright">© 2026 Jun Johnny | Optimized for Mobile & Desktop</div>
     </footer>
 </div>
@@ -126,9 +128,13 @@
             const res = await fetch(API);
             const data = await res.json();
             
-            // 同时更新顶部徽标和底部统计
+            // 1. 更新顶部跳转次数 (clicks)
+            if(data.clicks !== undefined) {
+                document.getElementById('header-clicks').innerText = data.clicks;
+            }
+
+            // 2. 更新底部 IP 访问量 (stats)
             if(data.stats) {
-                document.getElementById('header-total').innerText = data.stats.total;
                 document.getElementById('uv-today').innerText = data.stats.today;
                 document.getElementById('uv-total').innerText = data.stats.total;
             }
