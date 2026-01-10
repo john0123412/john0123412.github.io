@@ -5,31 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jun Johnny 的个人主页</title>
     <style>
-        <div class="section">
-    <h2>站点统计 (Site Stats)</h2>
-    <p>我的跳转链接已被点击了 <span id="click-count" class="highlight">加载中...</span> 次</p>
-</div>
-
-<script>
-    // 替换成你 Worker 的自定义域名或链接
-    const statsUrl = "https://go.junjohnny.me/"; 
-
-    async function getStats() {
-        try {
-            const response = await fetch(statsUrl);
-            const text = await response.text();
-            // 简单解析 HTML 里的数字（或者让 Worker 直接返回 JSON）
-            const match = text.match(/(\d+)<\/strong>/);
-            if (match) {
-                document.getElementById('click-count').innerText = match[1];
-            }
-        } catch (error) {
-            document.getElementById('click-count').innerText = "暂无数据";
-        }
-    }
-    getStats();
-</script>
-        /* CSS：负责页面的美化 */
+        /* CSS：负责页面的美化 - 这里只能写样式 */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
@@ -44,12 +20,13 @@
         }
         .container {
             background: #fff;
-            width: 80%;
+            width: 90%;
             max-width: 600px;
             padding: 40px;
             border-radius: 12px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            border-top: 8px solid #3b82f6; /* 程序员喜欢的蓝色 */
+            border-top: 8px solid #3b82f6;
+            margin: 20px auto;
         }
         h1 {
             color: #1e40af;
@@ -70,7 +47,7 @@
             color: #334155;
         }
         ul {
-            list-style-type: "🚀 "; /* 自定义列表符号 */
+            list-style-type: "🚀 ";
             padding-left: 20px;
         }
         li {
@@ -116,7 +93,12 @@
 
             <div class="section">
                 <h2>我的目标 (Goal)</h2>
-                <p>在大学期间，我希望能在 <span class="highlight">人工智能 (AI)</span> 和网络技术领域有所突破。目前我正专注于打好数学和编程的基础。</p>
+                <p>在大学期间，我希望能在 <span class="highlight">人工智能 (AI)</span> 和网络技术领域有所突破。</p>
+            </div>
+
+            <div class="section">
+                <h2>站点统计 (Site Stats)</h2>
+                <p>我的跳转链接已被点击了 <span id="click-count" class="highlight">加载中...</span> 次</p>
             </div>
         </main>
 
@@ -125,5 +107,27 @@
         </footer>
     </div>
 
+    <script>
+        const statsUrl = "https://go.junjohnny.me/"; 
+
+        async function getStats() {
+            try {
+                // 加上 mode: 'cors' 确保跨域请求正常
+                const response = await fetch(statsUrl, { mode: 'cors' });
+                const text = await response.text();
+                // 匹配我们在 Worker 里写的 <strong>数字</strong>
+                const match = text.match(/(\d+)<\/strong>/);
+                if (match) {
+                    document.getElementById('click-count').innerText = match[1];
+                } else {
+                    document.getElementById('click-count').innerText = "0";
+                }
+            } catch (error) {
+                console.error("获取统计失败:", error);
+                document.getElementById('click-count').innerText = "暂无数据";
+            }
+        }
+        getStats();
+    </script>
 </body>
 </html>
