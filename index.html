@@ -2,199 +2,296 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jun的个人主页</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Jun Johnny - Personal Portfolio</title>
     <style>
-        /* 1. 定义颜色变量 (CSS Variables) */
+        /* 1. 变量定义：支持暗黑模式切换 */
         :root {
-            --bg-color: #f0f4f8;
+            --bg-color: #f8fafc;
             --card-bg: #ffffff;
-            --text-main: #333333;
+            --text-main: #1e293b;
             --text-sub: #64748b;
-            --accent-color: #3b82f6;
-            --highlight-bg: #dbeafe;
-            --border-color: #e2e8f0;
+            --accent: #3b82f6;
+            --accent-soft: #dbeafe;
+            --border: #e2e8f0;
             --btn-hover: #1d4ed8;
+            --shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
         }
 
-        /* 2. 暗黑模式下的变量覆盖 */
         [data-theme="dark"] {
             --bg-color: #0f172a;
             --card-bg: #1e293b;
             --text-main: #f1f5f9;
             --text-sub: #94a3b8;
-            --accent-color: #60a5fa;
-            --highlight-bg: #1e3a8a;
-            --border-color: #334155;
+            --accent: #60a5fa;
+            --accent-soft: #1e3a8a;
+            --border: #334155;
             --btn-hover: #3b82f6;
+            --shadow: 0 10px 15px -3px rgba(0,0,0,0.3);
         }
 
+        /* 2. 基础响应式布局 */
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
         body {
-            font-family: 'Segoe UI', system-ui, sans-serif;
-            line-height: 1.6;
-            color: var(--text-main);
+            font-family: 'Inter', -apple-system, system-ui, sans-serif;
             background-color: var(--bg-color);
+            color: var(--text-main);
             margin: 0;
+            padding: 0;
             display: flex;
             justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            transition: background-color 0.3s ease, color 0.3s ease;
-        }
-
-        .container {
-            background: var(--card-bg);
-            width: 90%;
-            max-width: 650px;
-            padding: 40px;
-            margin: 20px;
-            border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            border-top: 8px solid var(--accent-color);
-            position: relative; /* 为切换按钮定位 */
             transition: background-color 0.3s ease;
         }
 
-        /* 暗黑模式切换按钮样式 */
+        .container {
+            width: 100%;
+            max-width: 800px;
+            padding: 20px;
+            margin-bottom: 40px;
+        }
+
+        /* 3. 头部设计 */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin: 20px 0 40px 0;
+        }
+
+        .profile-info h1 { margin: 0; font-size: 2rem; color: var(--accent); }
+        .profile-info p { margin: 5px 0; color: var(--text-sub); }
+
         .theme-toggle {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: none;
-            border: 2px solid var(--border-color);
+            background: var(--card-bg);
+            border: 1px solid var(--border);
             color: var(--text-main);
-            padding: 8px;
-            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
             cursor: pointer;
-            width: 40px;
-            height: 40px;
+            font-size: 1.2rem;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 20px;
-            transition: all 0.3s ease;
-        }
-        .theme-toggle:hover {
-            border-color: var(--accent-color);
-            transform: scale(1.1);
+            box-shadow: var(--shadow);
         }
 
-        h1 { color: var(--accent-color); font-size: 2.2em; margin-bottom: 5px; }
-        .subtitle { color: var(--text-sub); font-style: italic; margin-bottom: 30px; }
-        .section { margin-bottom: 25px; }
-        h2 { border-bottom: 2px solid var(--border-color); padding-bottom: 8px; color: var(--text-main); }
-        
-        .repo-card { border: 1px solid var(--border-color); padding: 15px; border-radius: 10px; margin-bottom: 12px; }
-        .repo-link { font-weight: bold; color: var(--accent-color); text-decoration: none; }
-        
-        .highlight { background-color: var(--highlight-bg); color: var(--accent-color); padding: 2px 8px; border-radius: 4px; font-weight: bold; }
-        
-        .msg-form { display: flex; flex-direction: column; gap: 10px; background: var(--bg-color); padding: 15px; border-radius: 10px; }
-        input, textarea { background: var(--card-bg); color: var(--text-main); border: 1px solid var(--border-color); padding: 10px; border-radius: 6px; }
-        button#send-btn { background: var(--accent-color); color: white; border: none; padding: 10px; border-radius: 6px; cursor: pointer; font-weight: bold; }
-        button#send-btn:hover { background: var(--btn-hover); }
+        /* 4. 卡片与网格布局 (自动适配) */
+        .section-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+        }
 
-        .msg-item { border-bottom: 1px dashed var(--border-color); padding: 10px 0; font-size: 0.9em; }
-        .msg-name { font-weight: bold; color: var(--accent-color); }
-        .msg-time { font-size: 0.8em; color: var(--text-sub); margin-left: 10px; }
-        footer { margin-top: 30px; text-align: center; font-size: 0.8em; color: var(--text-sub); }
+        h2 { font-size: 1.25rem; margin: 0 0 20px 0; display: flex; flex-direction: column; }
+        h2 span { font-size: 0.85rem; color: var(--text-sub); font-weight: normal; margin-top: 4px; }
+
+        /* LeetCode 链接网格：桌面 2 列，移动端 1 列 */
+        .link-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+        }
+
+        .link-card {
+            display: block;
+            text-decoration: none;
+            background: var(--bg-color);
+            padding: 16px;
+            border-radius: 12px;
+            border: 1px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        .link-card:hover { transform: translateY(-3px); border-color: var(--accent); }
+        .link-card strong { color: var(--accent); display: block; margin-bottom: 4px; }
+        .link-card small { color: var(--text-sub); font-size: 0.8rem; word-break: break-all; }
+
+        /* 5. 留言板与统计 */
+        .stats-tag {
+            background: var(--accent-soft);
+            color: var(--accent);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        .form-group { display: flex; flex-direction: column; gap: 12px; }
+        input, textarea {
+            width: 100%;
+            background: var(--bg-color);
+            color: var(--text-main);
+            border: 1px solid var(--border);
+            padding: 14px;
+            border-radius: 10px;
+            font-size: 1rem;
+        }
+
+        .submit-btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .submit-btn:hover { background: var(--btn-hover); }
+
+        .msg-list { margin-top: 20px; border-top: 1px solid var(--border); }
+        .msg-item { padding: 16px 0; border-bottom: 1px dashed var(--border); }
+        .msg-header { display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 6px; }
+        .msg-name { color: var(--accent); font-weight: bold; }
+        .msg-time { color: var(--text-sub); }
+
+        footer { text-align: center; padding: 40px 0; color: var(--text-sub); font-size: 0.85rem; }
+
+        /* 6. 移动端微调 */
+        @media (max-width: 480px) {
+            .container { padding: 15px; }
+            .section-card { padding: 20px; }
+            .profile-info h1 { font-size: 1.75rem; }
+        }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <button class="theme-toggle" id="theme-btn" title="切换主题">
-            <span id="theme-icon">🌙</span>
-        </button>
+<div class="container">
+    <header>
+        <div class="profile-info">
+            <h1>Jun Johnny</h1>
+            <p>Python Developer & CS Student</p>
+            <p>计算机科学在读 / 算法探索者</p>
+        </div>
+        <button class="theme-toggle" id="theme-btn" onclick="toggleTheme()">🌙</button>
+    </header>
 
-        <header>
-            <h1>Hello, my name is jun!</h1>
-            <p class="subtitle">"My Python and CS journey starts here."</p>
-        </header>
+    <main>
+        <div class="stats-tag">
+            📊 Total Clicks / 跳转统计: <span id="click-total">...</span>
+        </div>
 
-        <main>
-            <div class="section">
-                <p>📊 跳转统计：<span id="click-total" class="highlight">...</span> 次</p>
-                <h2>GitHub 仓库</h2>
-                <div class="repo-card">
-                    <a href="https://go.junjohnny.me/git" target="_blank" class="repo-link">📦 Python_Algorithms</a>
-                    <p style="font-size: 0.9em;">算法与数据结构练习。</p>
-                </div>
+        <div class="section-card">
+            <h2>Python_Algorithms <span>算法与数据结构练习 / Algorithm Practice</span></h2>
+            <div class="link-grid">
+                <a href="https://leetcode.cn/u/john0123412/" target="_blank" class="link-card">
+                    <strong>🇨🇳 LeetCode CN (国内地址)</strong>
+                    <small>leetcode.cn/u/john0123412/</small>
+                </a>
+                <a href="https://leetcode.com/u/john0123412/" target="_blank" class="link-card">
+                    <strong>🌎 LeetCode Global (国外地址)</strong>
+                    <small>leetcode.com/u/john0123412/</small>
+                </a>
             </div>
+        </div>
 
-            <div class="section">
-                <h2>留言板 (Guestbook)</h2>
-                <div class="msg-form">
-                    <input type="text" id="u-name" placeholder="名字">
-                    <textarea id="u-content" placeholder="留言内容..." rows="2"></textarea>
-                    <button id="send-btn" onclick="postMessage()">发送留言</button>
-                </div>
-                <div id="msg-display" style="margin-top: 15px; max-height: 200px; overflow-y: auto;">加载留言中...</div>
+        <div class="section-card">
+            <h2>GitHub Repositories <span>GitHub 仓库地址</span></h2>
+            <div class="link-grid" style="grid-template-columns: 1fr;">
+                <a href="https://github.com/john0123412" target="_blank" class="link-card" style="border-left: 4px solid var(--accent);">
+                    <strong>📦 My GitHub Profile</strong>
+                    <small>Explore my open source journey and code samples.</small>
+                    <br><small>https://github.com/john0123412</small>
+                </a>
             </div>
-        </main>
+        </div>
 
-        <footer>© 2026 Jun Johnny | Powered by Cloudflare Workers</footer>
-    </div>
+        <div class="section-card">
+            <h2>Guestbook <span>留言板</span></h2>
+            <div class="form-group">
+                <input type="text" id="u-name" placeholder="Your Name / 你的名字">
+                <textarea id="u-content" placeholder="Leave a message... / 留言内容..." rows="3"></textarea>
+                <button class="submit-btn" onclick="postMessage()">Submit / 提交留言</button>
+            </div>
+            <div id="msg-display" class="msg-list">
+                <p style="text-align: center; color: var(--text-sub);">Loading messages...</p>
+            </div>
+        </div>
+    </main>
 
-    <script>
-        // --- A. 暗黑模式逻辑 ---
-        const themeBtn = document.getElementById('theme-btn');
-        const themeIcon = document.getElementById('theme-icon');
-        const currentTheme = localStorage.getItem('theme') || 'light';
+    <footer>
+        <p>© 2026 Jun Johnny | Optimized for Mobile & Desktop</p>
+    </footer>
+</div>
 
-        // 初始化主题
-        if (currentTheme === 'dark') {
-            document.documentElement.setAttribute('data-theme', 'dark');
-            themeIcon.innerText = '☀️';
+<script>
+    // --- 1. 暗黑模式管理 ---
+    function toggleTheme() {
+        const doc = document.documentElement;
+        const btn = document.getElementById('theme-btn');
+        if (doc.getAttribute('data-theme') === 'dark') {
+            doc.removeAttribute('data-theme');
+            btn.innerText = '🌙';
+            localStorage.setItem('theme', 'light');
+        } else {
+            doc.setAttribute('data-theme', 'dark');
+            btn.innerText = '☀️';
+            localStorage.setItem('theme', 'dark');
         }
+    }
+    // 初始化主题
+    if (localStorage.getItem('theme') === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        document.getElementById('theme-btn').innerText = '☀️';
+    }
 
-        themeBtn.addEventListener('click', () => {
-            let theme = document.documentElement.getAttribute('data-theme');
-            if (theme === 'dark') {
-                document.documentElement.removeAttribute('data-theme');
-                themeIcon.innerText = '🌙';
-                localStorage.setItem('theme', 'light');
-            } else {
-                document.documentElement.setAttribute('data-theme', 'dark');
-                themeIcon.innerText = '☀️';
-                localStorage.setItem('theme', 'dark');
-            }
-        });
+    // --- 2. 后端 API 交互 ---
+    const API = "https://go.junjohnny.me/api/messages";
 
-        // --- B. 原有留言板逻辑 (保持不变) ---
-        const API = "https://go.junjohnny.me/api/messages";
-
-        async function loadData() {
-            try {
-                const res = await fetch(API);
-                const data = await res.json();
-                document.getElementById('click-total').innerText = data.clicks;
-                const list = document.getElementById('msg-display');
-                list.innerHTML = data.messages.reverse().map(m => `
-                    <div class="msg-item">
-                        <span class="msg-name">${m.name}</span><span class="msg-time">${m.time}</span>
-                        <p style="margin: 5px 0 0 0;">${m.content}</p>
+    async function loadContent() {
+        try {
+            const res = await fetch(API);
+            const data = await res.json();
+            
+            // 更新点击数
+            document.getElementById('click-total').innerText = data.clicks;
+            
+            // 渲染留言 (限制显示最近 8 条)
+            const list = document.getElementById('msg-display');
+            list.innerHTML = data.messages.reverse().slice(0, 8).map(m => `
+                <div class="msg-item">
+                    <div class="msg-header">
+                        <span class="msg-name">${m.name}</span>
+                        <span class="msg-time">${m.time}</span>
                     </div>
-                `).join('') || "暂无留言";
-            } catch (e) { console.error(e); }
+                    <div class="msg-body">${m.content}</div>
+                </div>
+            `).join('') || "<p style='text-align:center; padding:20px;'>No messages yet.</p>";
+        } catch (e) {
+            document.getElementById('msg-display').innerHTML = "<p style='color:red;'>Failed to load data.</p>";
         }
+    }
 
-        async function postMessage() {
-            const name = document.getElementById('u-name').value;
-            const content = document.getElementById('u-content').value;
-            if(!name || !content) return alert("请填写完整");
-            try {
-                const res = await fetch(API, {
-                    method: 'POST',
-                    body: JSON.stringify({ name, content })
-                });
-                const result = await res.json();
-                if(result.error) alert(result.error);
-                else { document.getElementById('u-content').value = ""; loadData(); }
-            } catch (e) { alert("提交失败"); }
-        }
+    async function postMessage() {
+        const name = document.getElementById('u-name').value;
+        const content = document.getElementById('u-content').value;
+        if(!name || !content) return alert("Please complete the form / 请填写完整内容");
 
-        window.onload = loadData;
-    </script>
+        try {
+            const res = await fetch(API, {
+                method: 'POST',
+                body: JSON.stringify({ name, content })
+            });
+            const result = await res.json();
+            if(result.error) alert(result.error);
+            else {
+                document.getElementById('u-content').value = "";
+                loadContent();
+                alert("Success! / 留言成功！");
+            }
+        } catch (e) { alert("Network error / 网络错误"); }
+    }
+
+    // 初始加载
+    window.onload = loadContent;
+</script>
 </body>
 </html>
