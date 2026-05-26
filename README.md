@@ -3,7 +3,7 @@
 [![Live](https://img.shields.io/badge/Live-junjohnny.me-blue?style=flat-square&logo=vercel)](https://junjohnny.me)
 [![Vue 3](https://img.shields.io/badge/Vue-3-42b883?style=flat-square&logo=vue.js)](https://vuejs.org/)
 [![Vite](https://img.shields.io/badge/Vite-8-646cff?style=flat-square&logo=vite)](https://vitejs.dev/)
-[![Deployed on Vercel](https://img.shields.io/badge/Deployed_on-Vercel-black?style=flat-square&logo=vercel)](https://vercel.com)
+[![Vercel](https://img.shields.io/badge/Deployed_on-Vercel-black?style=flat-square&logo=vercel)](https://vercel.com)
 [![Cloudflare](https://img.shields.io/badge/CDN-Cloudflare-f38020?style=flat-square&logo=cloudflare)](https://cloudflare.com)
 
 **[简体中文](README_CN.md)**
@@ -20,62 +20,85 @@
 |---|---|
 | Frontend | Vue 3 + Vite |
 | Styling | CSS custom properties |
-| i18n | Custom composable (EN / 简体 / 繁體) |
-| Deployment | Vercel |
-| CDN / DNS | Cloudflare |
+| i18n | Custom composable — EN / 简体中文 / 繁體中文 |
+| Deployment | Vercel (CI/CD on `main` push) |
+| CDN / DNS | Cloudflare (CNAME Flattening + DNS Only proxy) |
+| SSL | Automated Let's Encrypt via Vercel |
 | Domain | [junjohnny.me](https://junjohnny.me) |
 
 ---
 
-## Quick Start
+## Skills
 
-```bash
-npm install
-npm run dev      # dev server → http://localhost:5173/
-npm run build    # production build → dist/
-npm run preview  # preview dist/ → http://localhost:4173/
-```
+| Category | Tools |
+|---|---|
+| Languages & Core | C/C++ (OOP), Python, JavaScript, Shell Scripting |
+| Penetration & Security | Kali Linux, Nmap, Metasploit, SQLi, XSS, CSRF, Web Security Labs |
+| AI Agent System | OpenAI-compatible API, Tool Calling, MCP, Local Sandboxed Workflows |
+| Frontend & Dev Env | Vue 3, Vite, TailwindCSS, Linux (WSL), Docker, Git, GitHub Actions |
+
+---
+
+## Featured Project
+
+### PawnLogic &nbsp; `🛠️ Active Development`
+
+> A terminal-based AI agent framework engineered for autonomous task execution and sandboxed security workflows.
+
+- **Docker Sandboxing** — Dynamic environment isolation to securely execute agent-generated commands.
+- **Context & Memory** — Local persistent storage for complex, multi-turn technical workflows.
+- **Tool-Use & Automation** — Custom tool schemas for automated file manipulation and network tasks.
+
+`Python` `LLM Tool-Calling` `Docker API` `Linux` `Security`
+
+🔗 [github.com/john0123412/PawnLogic](https://github.com/john0123412/PawnLogic)
 
 ---
 
 ## Deployment
 
-Push to `main` → Vercel auto-builds and deploys.  
-Cloudflare proxies `junjohnny.me` → Vercel edge network.
+```
+GitHub (main) ──push──▶ Vercel CI/CD ──build──▶ Global Edge Network
+                                                       │
+                                          Cloudflare DNS (DNS Only)
+                                          CNAME Flattening → Vercel
+                                          SSL: Let's Encrypt (auto)
+```
+
+Every push to `main` triggers `npm run build` on Vercel and deploys to the edge automatically. Cloudflare is set to **DNS Only** (grey cloud) so Vercel handles SSL provisioning and renewal without TLS handshake conflicts.
 
 ---
 
-## Security
+## Local Development
 
-- No backend, no forms, no user input
-- `X-Frame-Options: DENY` via Vercel response headers
-- No third-party scripts or tracking
+```bash
+npm install
+npm run dev      # → http://localhost:5173/
+npm run build    # production build → dist/
+npm run preview  # preview build → http://localhost:4173/
+```
 
----
-
-## Local Network Access (WSL)
+**WSL — expose to local network:**
 
 ```bash
 npx vite --host
 ```
 
-If on WSL, forward the port from Windows PowerShell (Admin):
-
 ```powershell
-# Forward WSL port to Windows
+# Windows PowerShell (Admin) — port forward WSL → LAN
 netsh interface portproxy add v4tov4 listenport=5173 listenaddress=0.0.0.0 connectport=5173 connectaddress=<WSL_IP>
 netsh advfirewall firewall add rule name="Vite Dev Server" dir=in action=allow protocol=TCP localport=5173
 
-# Cleanup when done
+# Cleanup
 netsh interface portproxy delete v4tov4 listenport=5173 listenaddress=0.0.0.0
 netsh advfirewall firewall delete rule name="Vite Dev Server"
 ```
 
 ---
 
-## Documentation
+## Docs
 
-| Document | Description |
+| File | Description |
 |---|---|
-| **README.md** | This page (English) |
-| **README_CN.md** | 简体中文版 |
+| `README.md` | This page (English) |
+| `README_CN.md` | 简体中文版 |
