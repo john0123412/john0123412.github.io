@@ -22,7 +22,7 @@
 | Styling | CSS custom properties |
 | i18n | Custom composable — EN / 简体中文 / 繁體中文 |
 | Deployment | Vercel (CI/CD on `main` push) |
-| DNS | Cloudflare (DNS Only — CNAME Flattening) |
+| DNS | Cloudflare (DNS Only — CNAME → Vercel) |
 | CDN / SSL | Vercel Edge Network + Automated Let's Encrypt |
 | Domain | [junjohnny.me](https://junjohnny.me) |
 
@@ -61,11 +61,11 @@
 GitHub (main) ──push──▶ Vercel CI/CD ──build──▶ Global Edge Network
                                                        │
                                           Cloudflare DNS (DNS Only)
-                                          CNAME Flattening → Vercel
+                                          CNAME → Vercel
                                           SSL: Let's Encrypt (auto)
 ```
 
-Every push to `main` triggers `npm run build` on Vercel and deploys to the edge automatically. Cloudflare is set to **DNS Only** (grey cloud) so Vercel handles SSL provisioning and renewal without TLS handshake conflicts.
+Every push to `main` triggers `npm run build` on Vercel and deploys to the edge automatically. Cloudflare handles DNS resolution only (grey cloud, no proxy) — all CDN, traffic routing, and SSL are handled entirely by Vercel.
 
 ---
 

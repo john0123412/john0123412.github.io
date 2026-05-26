@@ -22,7 +22,7 @@
 | 样式 | CSS 自定义变量 |
 | 国际化 | 自定义 composable — EN / 简体中文 / 繁體中文 |
 | 部署 | Vercel（`main` 分支推送即触发） |
-| DNS | Cloudflare（仅 DNS — CNAME 扁平化） |
+| DNS | Cloudflare（仅 DNS — CNAME → Vercel） |
 | CDN / SSL | Vercel 边缘网络 + 自动 Let's Encrypt |
 | 域名 | [junjohnny.me](https://junjohnny.me) |
 
@@ -60,12 +60,12 @@
 ```
 GitHub (main) ──push──▶ Vercel CI/CD ──build──▶ 全球边缘网络
                                                        │
-                                          Cloudflare DNS（仅 DNS 模式）
-                                          CNAME 扁平化 → Vercel
+                                          Cloudflare DNS（仅 DNS）
+                                          CNAME → Vercel
                                           SSL: Let's Encrypt（自动）
 ```
 
-每次推送到 `main` 分支，Vercel 自动执行 `npm run build` 并部署至边缘节点。Cloudflare 设置为**仅 DNS**（灰色云朵），由 Vercel 全权处理 SSL 的申请与续签，避免 TLS 握手冲突。
+每次推送到 `main` 分支，Vercel 自动执行 `npm run build` 并部署至边缘节点。Cloudflare 仅负责 DNS 解析（灰色云朵，不开代理）—— CDN、流量路由和 SSL 全部由 Vercel 处理。
 
 ---
 
