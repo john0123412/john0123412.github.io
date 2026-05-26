@@ -26,8 +26,14 @@
   from { opacity: 0; transform: translateY(-10px); }
   to { opacity: 1; transform: translateY(0); }
 }
-@media (max-width: 600px) {
-  .hero { padding: 4rem 1.2rem 2rem; }
-  .hero-title { font-size: 1.9rem; }
+@media (max-width: 768px) {
+  .hero { padding: 4rem 1.5rem 2rem; }
+  .hero-title { font-size: 2rem; }
+  .hero-subtitle { font-size: 1rem; }
+}
+@media (max-width: 480px) {
+  .hero { padding: 3rem 1rem 1.5rem; }
+  .hero-title { font-size: 1.6rem; }
+  .hero-subtitle { font-size: 0.9rem; }
 }
 </style>

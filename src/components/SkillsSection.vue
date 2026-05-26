@@ -48,4 +48,8 @@ const categories = [
   font-size: 0.8rem;
   font-weight: 500;
 }
+@media (max-width: 480px) {
+  .skills-grid { grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .tag { font-size: 0.75rem; padding: 0.2rem 0.5rem; }
+}
 </style>

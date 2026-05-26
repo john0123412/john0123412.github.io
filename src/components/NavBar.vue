@@ -1,20 +1,67 @@
 <template>
   <nav class="nav">
     <div class="nav-brand">Jun Johnny</div>
-    <ul class="nav-links">
-      <li><a href="#about">About</a></li>
-      <li><a href="#skills">Skills</a></li>
-      <li><a href="#projects">Projects</a></li>
-      <li><a href="#links">Links</a></li>
-    </ul>
+    <div class="nav-right">
+      <ul class="nav-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#links">Links</a></li>
+      </ul>
+      <button class="theme-btn" @click="cycleTheme" :title="'Theme: ' + theme">
+        {{ themeIcon }}
+      </button>
+    </div>
   </nav>
 </template>
+
+<script setup>
+import { ref, onMounted } from 'vue'
+
+const theme = ref('default')
+const themeIcon = ref('🖥️')
+
+const icons = { default: '🖥️', light: '☀️', dark: '🌙' }
+
+function applyTheme(t) {
+  theme.value = t
+  themeIcon.value = icons[t]
+  if (t === 'dark') {
+    document.documentElement.setAttribute('data-theme', 'dark')
+  } else if (t === 'light') {
+    document.documentElement.removeAttribute('data-theme')
+  } else {
+    // default: follow system
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+    if (prefersDark) {
+      document.documentElement.setAttribute('data-theme', 'dark')
+    } else {
+      document.documentElement.removeAttribute('data-theme')
+    }
+  }
+  localStorage.setItem('theme', t)
+}
+
+function cycleTheme() {
+  const order = ['default', 'light', 'dark']
+  const next = order[(order.indexOf(theme.value) + 1) % 3]
+  applyTheme(next)
+}
+
+onMounted(() => {
+  const saved = localStorage.getItem('theme') || 'default'
+  applyTheme(saved)
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+    if (theme.value === 'default') applyTheme('default')
+  })
+})
+</script>
 
 <style scoped>
 .nav {
   position: sticky;
   top: 0;
-  background: rgba(248, 250, 252, 0.92);
+  background: var(--nav-bg);
   backdrop-filter: blur(10px);
   display: flex;
   justify-content: space-between;
@@ -27,6 +74,11 @@
   font-weight: 700;
   font-size: 1.2rem;
   color: var(--primary);
+}
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }
 .nav-links {
   list-style: none;
@@ -42,8 +94,27 @@
 .nav-links a:hover {
   color: var(--primary);
 }
+.theme-btn {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.4rem 0.6rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: transform 0.2s, border-color 0.2s;
+}
+.theme-btn:hover {
+  transform: scale(1.1);
+  border-color: var(--primary);
+}
+
 @media (max-width: 600px) {
   .nav { padding: 0.8rem 1rem; }
-  .nav-links { gap: 1rem; font-size: 0.85rem; }
+  .nav-links { gap: 0.8rem; }
+  .nav-links a { font-size: 0.8rem; }
+}
+
+@media (max-width: 380px) {
+  .nav-links { display: none; }
 }
 </style>

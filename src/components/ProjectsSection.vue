@@ -43,7 +43,7 @@ const projects = [
 <style scoped>
 .projects-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 1.2rem;
 }
 .project-card {
@@ -80,5 +80,9 @@ const projects = [
   padding: 0.2rem 0.5rem;
   border-radius: 4px;
   font-size: 0.75rem;
+}
+@media (max-width: 480px) {
+  .projects-grid { grid-template-columns: 1fr; }
+  .project-card { padding: 1rem; }
 }
 </style>

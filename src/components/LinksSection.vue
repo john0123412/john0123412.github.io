@@ -32,7 +32,7 @@ const links = [
 <style scoped>
 .links-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   gap: 1rem;
 }
 .link-card {
@@ -54,4 +54,10 @@ const links = [
 }
 .link-icon { font-size: 1.3rem; }
 .link-name { font-weight: 500; font-size: 0.9rem; }
+
+@media (max-width: 480px) {
+  .links-grid { grid-template-columns: 1fr 1fr; gap: 0.8rem; }
+  .link-card { padding: 0.7rem 0.9rem; }
+  .link-name { font-size: 0.8rem; }
+}
 </style>
