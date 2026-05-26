@@ -4,7 +4,7 @@
 [![Vue 3](https://img.shields.io/badge/Vue-3-42b883?style=flat-square&logo=vue.js)](https://vuejs.org/)
 [![Vite](https://img.shields.io/badge/Vite-8-646cff?style=flat-square&logo=vite)](https://vitejs.dev/)
 [![Vercel](https://img.shields.io/badge/Deployed_on-Vercel-black?style=flat-square&logo=vercel)](https://vercel.com)
-[![Cloudflare](https://img.shields.io/badge/CDN-Cloudflare-f38020?style=flat-square&logo=cloudflare)](https://cloudflare.com)
+[![Cloudflare](https://img.shields.io/badge/DNS-Cloudflare-f38020?style=flat-square&logo=cloudflare)](https://cloudflare.com)
 
 **[English](README.md)**
 
@@ -22,8 +22,8 @@
 | 样式 | CSS 自定义变量 |
 | 国际化 | 自定义 composable — EN / 简体中文 / 繁體中文 |
 | 部署 | Vercel（`main` 分支推送即触发） |
-| CDN / DNS | Cloudflare（CNAME 扁平化 + 仅 DNS 代理） |
-| SSL | Vercel 自动申请 Let's Encrypt |
+| DNS | Cloudflare（仅 DNS — CNAME 扁平化） |
+| CDN / SSL | Vercel 边缘网络 + 自动 Let's Encrypt |
 | 域名 | [junjohnny.me](https://junjohnny.me) |
 
 ---

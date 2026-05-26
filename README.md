@@ -4,7 +4,7 @@
 [![Vue 3](https://img.shields.io/badge/Vue-3-42b883?style=flat-square&logo=vue.js)](https://vuejs.org/)
 [![Vite](https://img.shields.io/badge/Vite-8-646cff?style=flat-square&logo=vite)](https://vitejs.dev/)
 [![Vercel](https://img.shields.io/badge/Deployed_on-Vercel-black?style=flat-square&logo=vercel)](https://vercel.com)
-[![Cloudflare](https://img.shields.io/badge/CDN-Cloudflare-f38020?style=flat-square&logo=cloudflare)](https://cloudflare.com)
+[![Cloudflare](https://img.shields.io/badge/DNS-Cloudflare-f38020?style=flat-square&logo=cloudflare)](https://cloudflare.com)
 
 **[简体中文](README_CN.md)**
 
@@ -22,8 +22,8 @@
 | Styling | CSS custom properties |
 | i18n | Custom composable — EN / 简体中文 / 繁體中文 |
 | Deployment | Vercel (CI/CD on `main` push) |
-| CDN / DNS | Cloudflare (CNAME Flattening + DNS Only proxy) |
-| SSL | Automated Let's Encrypt via Vercel |
+| DNS | Cloudflare (DNS Only — CNAME Flattening) |
+| CDN / SSL | Vercel Edge Network + Automated Let's Encrypt |
 | Domain | [junjohnny.me](https://junjohnny.me) |
 
 ---
