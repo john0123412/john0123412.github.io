@@ -37,7 +37,7 @@ const t = {
       h3: { label: 'Tool-Use & Automation', text: 'Custom schemas for automated file manipulation and network tasks.' },
     },
     links: { title: 'Contact & Links' },
-    footer: 'Built with Vue 3 + Vite · Hosted on GitHub Pages',
+    footer: 'Built with Vue 3 + Vite · Deployed on Vercel',
   },
   zh: {
     nav: { about: '关于', skills: '技能', projects: '项目', links: '联系' },
@@ -68,7 +68,7 @@ const t = {
       h3: { label: '工具调用与自动化', text: '自定义 Schema，实现文件操作和网络任务的自动化。' },
     },
     links: { title: '联系方式' },
-    footer: '使用 Vue 3 + Vite 构建 · 部署于 GitHub Pages',
+    footer: '使用 Vue 3 + Vite 构建 · 部署于 Vercel',
   },
   zhtw: {
     nav: { about: '關於', skills: '技能', projects: '專案', links: '聯絡' },
@@ -99,7 +99,7 @@ const t = {
       h3: { label: '工具呼叫與自動化', text: '自訂 Schema，實現檔案操作和網路任務的自動化。' },
     },
     links: { title: '聯絡方式' },
-    footer: '使用 Vue 3 + Vite 建構 · 部署於 GitHub Pages',
+    footer: '使用 Vue 3 + Vite 建構 · 部署於 Vercel',
   },
 }
 

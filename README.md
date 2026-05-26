@@ -1,122 +1,117 @@
-# john0123412.github.io
+# jun johnny · portfolio
 
-Personal portfolio built with Vue 3 + Vite, deployed via GitHub Actions to GitHub Pages.
+**[English](#english)** | **[中文](#中文)**
 
-## Development
+🌐 **Live:** [junjohnny.me](https://junjohnny.me) / [www.junjohnny.me](https://www.junjohnny.me)
+
+---
+
+## English
+
+Personal portfolio of **Jun Johnny** — CS student & security researcher.  
+Built with Vue 3 + Vite, deployed on Vercel, CDN via Cloudflare.
+
+### Stack
+
+| Layer | Tech |
+|---|---|
+| Frontend | Vue 3 + Vite |
+| Styling | CSS custom properties (no framework) |
+| i18n | Custom composable (EN / 简体 / 繁體) |
+| Deployment | Vercel |
+| CDN / DNS | Cloudflare |
+| Domain | [junjohnny.me](https://junjohnny.me) |
+
+### Development
 
 ```bash
 npm install
-npm run dev      # local dev server
-npm run build    # production build -> dist/
+npm run dev      # dev server → http://localhost:5173/
+npm run build    # production build → dist/
+npm run preview  # preview dist/ → http://localhost:4173/
 ```
 
-## Deployment
+### Deployment
 
-Push to `main` triggers GitHub Actions which builds and deploys automatically.
+Push to `main` → Vercel auto-builds and deploys.  
+Cloudflare proxies `junjohnny.me` and `www.junjohnny.me` → Vercel edge network.
 
-## Security
+### Security
 
-- No backend, no forms, no user input accepted
-- CSP headers injected at build time (production only) to restrict all external resource loading
-- X-Frame-Options DENY prevents clickjacking
+- No backend, no forms, no user input
+- `X-Frame-Options: DENY` via Vercel headers
 - No third-party scripts or tracking
 
-## Local Preview Guide
-
-### Prerequisites
-
-- [Node.js](https://nodejs.org/) v18 or above (includes npm)
-
-### Steps
-
-1. Open a terminal and navigate to the project directory:
-
-   ```bash
-   cd /path/to/john0123412.github.io
-   ```
-
-2. Install dependencies (only needed once, or after `package.json` changes):
-
-   ```bash
-   npm install
-   ```
-
-3. Start the local development server:
-
-   ```bash
-   npm run dev
-   ```
-
-4. The terminal will display a local URL, typically:
-
-   ```
-   Local:   http://localhost:5173/
-   ```
-
-   Open that URL in your browser to preview the site.
-
-5. The dev server supports **hot reload** — any file changes will instantly reflect in the browser without manual refresh.
-
-6. To stop the server, press `Ctrl + C` in the terminal.
-
-### Preview Production Build
-
-To test the final optimized output (same as what gets deployed):
+### Local Network Access (WSL)
 
 ```bash
-npm run build
-npm run preview
+npx vite --host   # exposes Network: IP
 ```
 
-This serves the `dist/` folder locally, typically at `http://localhost:4173/`.
-
-### Access from Other Devices on the Same Network
-
-Start the dev server with host binding:
-
-```bash
-npx vite --host
-```
-
-The terminal will show a `Network:` URL. Open that on any device connected to the same LAN.
-
-#### WSL (Windows Subsystem for Linux) Users
-
-If you are running this project inside WSL, devices on your local network cannot directly reach WSL's virtual IP. You need to set up port forwarding on the Windows host.
-
-**Step 1 — Find your WSL IP**
-
-The `Network:` line in Vite's output shows it (e.g. `10.0.0.106`).
-
-**Step 2 — Set up port forwarding (run in Windows PowerShell as Administrator)**
+If on WSL, forward the port from Windows PowerShell (Admin):
 
 ```powershell
+# Forward WSL port to Windows
 netsh interface portproxy add v4tov4 listenport=5173 listenaddress=0.0.0.0 connectport=5173 connectaddress=<WSL_IP>
-```
-
-Replace `<WSL_IP>` with the IP from Step 1, and `5173` with the actual port Vite is using.
-
-**Step 3 — Allow the port through Windows Firewall**
-
-```powershell
 netsh advfirewall firewall add rule name="Vite Dev Server" dir=in action=allow protocol=TCP localport=5173
+
+# Cleanup when done
+netsh interface portproxy delete v4tov4 listenport=5173 listenaddress=0.0.0.0
+netsh advfirewall firewall delete rule name="Vite Dev Server"
 ```
 
-**Step 4 — Find your Windows LAN IP**
+---
 
-```powershell
-ipconfig
+## 中文
+
+**Jun Johnny** 的个人作品集 —— CS 学生 & 安全研究员。  
+使用 Vue 3 + Vite 构建，部署于 Vercel，通过 Cloudflare 加速。
+
+### 技术栈
+
+| 层级 | 技术 |
+|---|---|
+| 前端 | Vue 3 + Vite |
+| 样式 | CSS 自定义变量（无第三方框架） |
+| 国际化 | 自定义 composable（EN / 简体 / 繁體） |
+| 部署 | Vercel |
+| CDN / DNS | Cloudflare |
+| 域名 | [junjohnny.me](https://junjohnny.me) |
+
+### 本地开发
+
+```bash
+npm install
+npm run dev      # 开发服务器 → http://localhost:5173/
+npm run build    # 生产构建 → dist/
+npm run preview  # 预览 dist/ → http://localhost:4173/
 ```
 
-Look for the IPv4 address under your Wi-Fi or Ethernet adapter (e.g. `192.168.1.100`).
+### 部署流程
 
-**Step 5 — Access from phone/tablet**
+推送到 `main` 分支 → Vercel 自动构建并部署。  
+Cloudflare 代理 `junjohnny.me` 和 `www.junjohnny.me` → Vercel 边缘网络。
 
-Open `http://192.168.1.100:5173/` in the browser on any device connected to the same Wi-Fi.
+### 安全
 
-**Cleanup — Remove forwarding and firewall rule when done**
+- 无后端、无表单、无用户输入
+- 通过 Vercel 响应头注入 `X-Frame-Options: DENY`
+- 无任何第三方脚本或追踪
+
+### 局域网访问（WSL 用户）
+
+```bash
+npx vite --host   # 显示 Network: IP 地址
+```
+
+WSL 环境下需在 Windows PowerShell（管理员）中设置端口转发：
 
 ```powershell
+# 转发 WSL 端口到 Windows
+netsh interface portproxy add v4tov4 listenport=5173 listenaddress=0.0.0.0 connectport=5173 connectaddress=<WSL_IP>
+netsh advfirewall firewall add rule name="Vite Dev Server" dir=in action=allow protocol=TCP localport=5173
+
+# 完成后清理
 netsh interface portproxy delete v4tov4 listenport=5173 listenaddress=0.0.0.0
 netsh advfirewall firewall delete rule name="Vite Dev Server"
 ```
