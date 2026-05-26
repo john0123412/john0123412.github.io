@@ -1,8 +1,15 @@
 <template>
   <footer class="footer">
-    <p>&copy; 2026 Jun Johnny · Built with Vue 3 + Vite · Hosted on GitHub Pages</p>
+    <p>&copy; 2026 Jun Johnny · {{ tr.footer }}</p>
   </footer>
 </template>
+
+<script setup>
+import { computed } from 'vue'
+import { useI18n } from '../composables/useI18n.js'
+const { lang, t } = useI18n()
+const tr = computed(() => t[lang.value])
+</script>
 
 <style scoped>
 .footer {

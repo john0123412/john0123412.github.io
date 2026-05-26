@@ -1,6 +1,6 @@
 <template>
   <section id="links" class="section fade-up" ref="el">
-    <h2 class="section-title">Contact &amp; Links</h2>
+    <h2 class="section-title">{{ tr.links.title }}</h2>
     <div class="links-grid">
       <a
         class="link-card"
@@ -18,8 +18,12 @@
 </template>
 
 <script setup>
+import { computed } from 'vue'
 import { useIntersect } from '../composables/useIntersect.js'
+import { useI18n } from '../composables/useI18n.js'
 const el = useIntersect()
+const { lang, t } = useI18n()
+const tr = computed(() => t[lang.value])
 
 const links = [
   { name: 'GitHub', url: 'https://github.com/john0123412', icon: '💻' },

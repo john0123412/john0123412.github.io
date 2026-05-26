@@ -1,8 +1,8 @@
 <template>
   <section id="skills" class="section fade-up" ref="el">
-    <h2 class="section-title">Skills</h2>
+    <h2 class="section-title">{{ tr.skills.title }}</h2>
     <div class="skills-grid">
-      <div class="skill-category" v-for="cat in categories" :key="cat.name">
+      <div class="skill-category" v-for="cat in tr.skills.categories" :key="cat.name">
         <h3>{{ cat.name }}</h3>
         <div class="skill-tags">
           <span class="tag" v-for="item in cat.items" :key="item">{{ item }}</span>
@@ -13,15 +13,12 @@
 </template>
 
 <script setup>
+import { computed } from 'vue'
 import { useIntersect } from '../composables/useIntersect.js'
+import { useI18n } from '../composables/useI18n.js'
 const el = useIntersect()
-
-const categories = [
-  { name: 'Languages & Core', items: ['C/C++ (OOP)', 'Python', 'JavaScript', 'Shell Scripting'] },
-  { name: 'Penetration & Security', items: ['Kali Linux', 'Nmap', 'Metasploit', 'SQLi', 'XSS', 'CSRF', 'Web Security Labs'] },
-  { name: 'AI Agent System', items: ['OpenAI-compatible API', 'Tool Calling', 'MCP', 'Local Sandboxed Workflows'] },
-  { name: 'Frontend & Dev Env', items: ['Vue 3', 'Vite', 'TailwindCSS', 'Linux (WSL)', 'Docker', 'Git', 'GitHub Actions'] },
-]
+const { lang, t } = useI18n()
+const tr = computed(() => t[lang.value])
 </script>
 
 <style scoped>

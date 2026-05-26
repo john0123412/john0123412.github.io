@@ -1,13 +1,20 @@
 <template>
   <section class="hero">
     <h1 class="hero-title">Hi, I'm <span class="highlight">Jun Johnny</span></h1>
-    <p class="hero-subtitle">I focus on AI Agent automation, penetration testing (Kali Linux), web security labs, and building practical full-stack tools.</p>
+    <p class="hero-subtitle">{{ tr.hero.subtitle }}</p>
     <div class="hero-ctas">
-      <a href="#projects" class="btn btn-primary">View Projects</a>
+      <a href="#projects" class="btn btn-primary">{{ tr.hero.viewProjects }}</a>
       <a href="https://github.com/john0123412" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">GitHub</a>
     </div>
   </section>
 </template>
+
+<script setup>
+import { computed } from 'vue'
+import { useI18n } from '../composables/useI18n.js'
+const { lang, t } = useI18n()
+const tr = computed(() => t[lang.value])
+</script>
 
 <style scoped>
 .hero {

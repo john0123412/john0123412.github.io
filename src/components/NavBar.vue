@@ -3,11 +3,18 @@
     <div class="nav-brand">Jun Johnny</div>
     <div class="nav-right">
       <ul class="nav-links">
-        <li><a href="#about">About</a></li>
-        <li><a href="#skills">Skills</a></li>
-        <li><a href="#projects">Projects</a></li>
-        <li><a href="#links">Links</a></li>
+        <li><a href="#about">{{ tr.nav.about }}</a></li>
+        <li><a href="#skills">{{ tr.nav.skills }}</a></li>
+        <li><a href="#projects">{{ tr.nav.projects }}</a></li>
+        <li><a href="#links">{{ tr.nav.links }}</a></li>
       </ul>
+      <div class="lang-wrapper">
+        <select class="lang-select" :value="lang" @change="e => setLang(e.target.value)" aria-label="Language">
+          <option value="en">EN</option>
+          <option value="zh">简体</option>
+          <option value="zhtw">繁體</option>
+        </select>
+      </div>
       <button class="theme-btn" @click="cycleTheme" :title="'Theme: ' + theme">
         {{ themeIcon }}
       </button>
@@ -16,7 +23,11 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
+import { useI18n } from '../composables/useI18n.js'
+
+const { lang, t, setLang } = useI18n()
+const tr = computed(() => t[lang.value])
 
 const theme = ref('default')
 const themeIcon = ref('💻')
@@ -31,7 +42,6 @@ function applyTheme(t) {
   } else if (t === 'light') {
     document.documentElement.removeAttribute('data-theme')
   } else {
-    // default: follow system
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
     if (prefersDark) {
       document.documentElement.setAttribute('data-theme', 'dark')
@@ -93,6 +103,23 @@ onMounted(() => {
 }
 .nav-links a:hover {
   color: var(--primary);
+}
+.lang-select {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.4rem 0.5rem;
+  font-size: 0.85rem;
+  color: var(--text);
+  cursor: pointer;
+  transition: border-color 0.2s;
+  appearance: none;
+  -webkit-appearance: none;
+  text-align: center;
+}
+.lang-select:hover, .lang-select:focus {
+  border-color: var(--primary);
+  outline: none;
 }
 .theme-btn {
   background: var(--card-bg);

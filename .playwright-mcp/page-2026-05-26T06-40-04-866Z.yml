@@ -1,0 +1,126 @@
+- generic [ref=e2]:
+  - navigation [ref=e3]:
+    - generic [ref=e4]: Jun Johnny
+    - generic [ref=e5]:
+      - list [ref=e6]:
+        - listitem [ref=e7]:
+          - link "About" [ref=e8] [cursor=pointer]:
+            - /url: "#about"
+        - listitem [ref=e9]:
+          - link "Skills" [ref=e10] [cursor=pointer]:
+            - /url: "#skills"
+        - listitem [ref=e11]:
+          - link "Projects" [ref=e12] [cursor=pointer]:
+            - /url: "#projects"
+        - listitem [ref=e13]:
+          - link "Links" [ref=e14] [cursor=pointer]:
+            - /url: "#links"
+      - combobox "Language" [ref=e16] [cursor=pointer]:
+        - option "EN" [selected]
+        - option "简体"
+        - option "繁體"
+      - button "💻" [ref=e17] [cursor=pointer]
+  - generic [ref=e18]:
+    - heading "Hi, I'm Jun Johnny" [level=1] [ref=e19]
+    - paragraph [ref=e20]: I focus on AI Agent automation, penetration testing (Kali Linux), web security labs, and building practical full-stack tools.
+    - generic [ref=e21]:
+      - link "View Projects" [ref=e22] [cursor=pointer]:
+        - /url: "#projects"
+      - link "GitHub" [ref=e23] [cursor=pointer]:
+        - /url: https://github.com/john0123412
+  - generic [ref=e24]:
+    - heading "About Me" [level=2] [ref=e25]
+    - paragraph [ref=e26]:
+      - text: I'm a Computer Science student driven by
+      - strong [ref=e27]: systems programming
+      - text: ","
+      - strong [ref=e28]: automation
+      - text: ", and"
+      - strong [ref=e29]: offensive security
+      - text: . Instead of just studying theory, I prefer building and breaking systems to understand their underlying mechanics.
+    - paragraph [ref=e30]:
+      - text: My primary engineering focus right now is
+      - strong [ref=e31]: PawnLogic
+      - text: ", a terminal-based AI agent framework designed to explore multi-model routing, sandbox isolation via Docker, and persistent memory. When I'm not developing automation tools, I'm diving into penetration testing workflows within Kali Linux environments, conducting web vulnerability research, and refining automated script execution."
+  - generic [ref=e32]:
+    - heading "Skills" [level=2] [ref=e33]
+    - generic [ref=e34]:
+      - generic [ref=e35]:
+        - heading "Languages & Core" [level=3] [ref=e36]
+        - generic [ref=e37]:
+          - generic [ref=e38]: C/C++ (OOP)
+          - generic [ref=e39]: Python
+          - generic [ref=e40]: JavaScript
+          - generic [ref=e41]: Shell Scripting
+      - generic [ref=e42]:
+        - heading "Penetration & Security" [level=3] [ref=e43]
+        - generic [ref=e44]:
+          - generic [ref=e45]: Kali Linux
+          - generic [ref=e46]: Nmap
+          - generic [ref=e47]: Metasploit
+          - generic [ref=e48]: SQLi
+          - generic [ref=e49]: XSS
+          - generic [ref=e50]: CSRF
+          - generic [ref=e51]: Web Security Labs
+      - generic [ref=e52]:
+        - heading "AI Agent System" [level=3] [ref=e53]
+        - generic [ref=e54]:
+          - generic [ref=e55]: OpenAI-compatible API
+          - generic [ref=e56]: Tool Calling
+          - generic [ref=e57]: MCP
+          - generic [ref=e58]: Local Sandboxed Workflows
+      - generic [ref=e59]:
+        - heading "Frontend & Dev Env" [level=3] [ref=e60]
+        - generic [ref=e61]:
+          - generic [ref=e62]: Vue 3
+          - generic [ref=e63]: Vite
+          - generic [ref=e64]: TailwindCSS
+          - generic [ref=e65]: Linux (WSL)
+          - generic [ref=e66]: Docker
+          - generic [ref=e67]: Git
+          - generic [ref=e68]: GitHub Actions
+  - generic [ref=e69]:
+    - heading "Projects" [level=2] [ref=e70]
+    - link "PawnLogic 🛠️ Active Development A terminal-based AI agent framework engineered for autonomous task execution and sandboxed security workflows. Docker Sandboxing：Dynamic environment isolation to securely execute agent-generated commands. Context & Memory：Local persistent storage for complex, multi-turn technical workflows. Tool-Use & Automation：Custom schemas for automated file manipulation and network tasks. Python LLM Tool-Calling Docker API Linux Security" [ref=e72] [cursor=pointer]:
+      - /url: https://github.com/john0123412/PawnLogic
+      - generic [ref=e73]:
+        - heading "PawnLogic" [level=3] [ref=e74]
+        - generic [ref=e75]: 🛠️ Active Development
+      - paragraph [ref=e76]: A terminal-based AI agent framework engineered for autonomous task execution and sandboxed security workflows.
+      - list [ref=e77]:
+        - listitem [ref=e78]:
+          - strong [ref=e79]: Docker Sandboxing：
+          - text: Dynamic environment isolation to securely execute agent-generated commands.
+        - listitem [ref=e80]:
+          - strong [ref=e81]: Context & Memory：
+          - text: Local persistent storage for complex, multi-turn technical workflows.
+        - listitem [ref=e82]:
+          - strong [ref=e83]: Tool-Use & Automation：
+          - text: Custom schemas for automated file manipulation and network tasks.
+      - generic [ref=e84]:
+        - generic [ref=e85]: Python
+        - generic [ref=e86]: LLM Tool-Calling
+        - generic [ref=e87]: Docker API
+        - generic [ref=e88]: Linux
+        - generic [ref=e89]: Security
+  - generic [ref=e90]:
+    - heading "Contact & Links" [level=2] [ref=e91]
+    - generic [ref=e92]:
+      - link "💻 GitHub" [ref=e93] [cursor=pointer]:
+        - /url: https://github.com/john0123412
+        - generic [ref=e94]: 💻
+        - generic [ref=e95]: GitHub
+      - link "🧩 LeetCode CN" [ref=e96] [cursor=pointer]:
+        - /url: https://leetcode.cn/u/john0123412/
+        - generic [ref=e97]: 🧩
+        - generic [ref=e98]: LeetCode CN
+      - link "🌍 LeetCode Global" [ref=e99] [cursor=pointer]:
+        - /url: https://leetcode.com/u/john0123412/
+        - generic [ref=e100]: 🌍
+        - generic [ref=e101]: LeetCode Global
+      - link "✉️ Email" [ref=e102] [cursor=pointer]:
+        - /url: mailto:junjohn05@gmail.com
+        - generic [ref=e103]: ✉️
+        - generic [ref=e104]: Email
+  - contentinfo [ref=e105]:
+    - paragraph [ref=e106]: © 2026 Jun Johnny · Built with Vue 3 + Vite · Hosted on GitHub Pages
