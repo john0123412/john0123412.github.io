@@ -17,10 +17,10 @@ import { useIntersect } from '../composables/useIntersect.js'
 const el = useIntersect()
 
 const categories = [
-  { name: 'Languages', items: ['Python', 'Java', 'JavaScript', 'C'] },
-  { name: 'Security', items: ['Network Security', 'CTF / Pwn', 'Penetration Testing'] },
-  { name: 'AI / Agent', items: ['LLM Agents', 'Prompt Engineering', 'MCP', 'Tool-Use'] },
-  { name: 'DevOps', items: ['Git', 'Linux', 'Docker', 'GitHub Actions'] },
+  { name: 'Languages & Core', items: ['C/C++ (OOP)', 'Python', 'JavaScript', 'Shell Scripting'] },
+  { name: 'Penetration & Security', items: ['Kali Linux', 'Nmap', 'Metasploit', 'SQLi', 'XSS', 'CSRF', 'Web Security Labs'] },
+  { name: 'AI Agent System', items: ['OpenAI-compatible API', 'Tool Calling', 'MCP', 'Local Sandboxed Workflows'] },
+  { name: 'Frontend & Dev Env', items: ['Vue 3', 'Vite', 'TailwindCSS', 'Linux (WSL)', 'Docker', 'Git', 'GitHub Actions'] },
 ]
 </script>
 

@@ -22,9 +22,9 @@ import { useIntersect } from '../composables/useIntersect.js'
 const el = useIntersect()
 
 const links = [
-  { name: 'GitHub', url: 'https://github.com/john0123412', icon: '📦' },
-  { name: 'LeetCode CN', url: 'https://leetcode.cn/u/john0123412/', icon: '🇨🇳' },
-  { name: 'LeetCode Global', url: 'https://leetcode.com/u/john0123412/', icon: '🌎' },
+  { name: 'GitHub', url: 'https://github.com/john0123412', icon: '💻' },
+  { name: 'LeetCode CN', url: 'https://leetcode.cn/u/john0123412/', icon: '🧩' },
+  { name: 'LeetCode Global', url: 'https://leetcode.com/u/john0123412/', icon: '🌍' },
   { name: 'Email', url: 'mailto:junjohn05@gmail.com', icon: '✉️' },
 ]
 </script>

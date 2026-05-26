@@ -19,9 +19,9 @@
 import { ref, onMounted } from 'vue'
 
 const theme = ref('default')
-const themeIcon = ref('🖥️')
+const themeIcon = ref('💻')
 
-const icons = { default: '🖥️', light: '☀️', dark: '🌙' }
+const icons = { default: '💻', light: '☀️', dark: '🌙' }
 
 function applyTheme(t) {
   theme.value = t

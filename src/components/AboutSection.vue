@@ -1,8 +1,8 @@
 <template>
   <section id="about" class="section fade-up" ref="el">
     <h2 class="section-title">About Me</h2>
-    <p>I'm a Computer Science student with a strong focus on <strong>cybersecurity</strong> and <strong>AI Agent</strong> development.</p>
-    <p>I enjoy exploring how LLM-powered autonomous agents can orchestrate complex tasks, and how offensive/defensive security practices protect the systems we build. Currently grinding algorithms, shipping open-source projects, and diving deep into agent architectures.</p>
+    <p>I'm a Computer Science student driven by <strong>systems programming</strong>, <strong>automation</strong>, and <strong>offensive security</strong>. Instead of just studying theory, I prefer building and breaking systems to understand their underlying mechanics.</p>
+    <p>My primary engineering focus right now is <strong>PawnLogic</strong>, a terminal-based AI agent framework designed to explore multi-model routing, sandbox isolation via Docker, and persistent memory. When I'm not developing automation tools, I'm diving into penetration testing workflows within Kali Linux environments, conducting web vulnerability research, and refining automated script execution.</p>
   </section>
 </template>
 
