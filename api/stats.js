@@ -11,16 +11,17 @@ export default async function handler(req, res) {
 
   if (!isFromSelf) return res.status(403).json({ error: 'forbidden' })
 
-  // Asia/Shanghai (UTC+8) date range: yesterday → today
-  const SHANGHAI_OFFSET_MS = 8 * 60 * 60 * 1000
-  const nowShanghai = new Date(Date.now() + SHANGHAI_OFFSET_MS)
-  const today = nowShanghai.toISOString().slice(0, 10)
-  const yesterday = new Date(nowShanghai.getTime() - 24 * 60 * 60 * 1000)
-    .toISOString().slice(0, 10)
+  // Asia/Shanghai today, mapped to absolute UTC range
+  const shanghaiOffset = 8 * 60 * 60 * 1000
+  const shanghaiNow = new Date(Date.now() + shanghaiOffset)
+  const shanghaiToday = shanghaiNow.toISOString().slice(0, 10) // "YYYY-MM-DD"
+
+  const startUTC = new Date(`${shanghaiToday}T00:00:00+08:00`).toISOString()
+  const endUTC = new Date(`${shanghaiToday}T23:59:59+08:00`).toISOString()
 
   try {
     const r = await fetch(
-      `https://junjohnny.goatcounter.com/api/v0/stats/hits?start=${yesterday}&end=${today}`,
+      `https://junjohnny.goatcounter.com/api/v0/stats/hits?start=${encodeURIComponent(startUTC)}&end=${encodeURIComponent(endUTC)}`,
       {
         headers: { Authorization: `Bearer ${process.env.GC_TOKEN}` },
         signal: AbortSignal.timeout(3000)
