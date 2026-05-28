@@ -55,6 +55,22 @@
 
 ---
 
+## Security
+
+All security headers are served via Vercel response headers (`vercel.json`), not meta tags.
+
+| Header | Value |
+|---|---|
+| `Content-Security-Policy` | `default-src 'self'` — no external resources |
+| `X-Frame-Options` | `DENY` |
+| `X-Content-Type-Options` | `nosniff` |
+| `Referrer-Policy` | `strict-origin-when-cross-origin` |
+| `Permissions-Policy` | camera, mic, geolocation disabled |
+
+No backend, no forms, no user input. No third-party scripts or tracking.
+
+---
+
 ## Deployment
 
 ```

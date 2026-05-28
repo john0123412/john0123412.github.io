@@ -55,6 +55,22 @@
 
 ---
 
+## 安全
+
+所有安全响应头均通过 Vercel 的 `vercel.json` 下发，不使用 meta 标签。
+
+| 响应头 | 值 |
+|---|---|
+| `Content-Security-Policy` | `default-src 'self'` — 禁止外部资源 |
+| `X-Frame-Options` | `DENY` |
+| `X-Content-Type-Options` | `nosniff` |
+| `Referrer-Policy` | `strict-origin-when-cross-origin` |
+| `Permissions-Policy` | 摄像头、麦克风、地理位置均禁用 |
+
+无后端、无表单、无用户输入。无任何第三方脚本或追踪。
+
+---
+
 ## 部署架构
 
 ```
