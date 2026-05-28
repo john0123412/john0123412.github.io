@@ -1,10 +1,15 @@
 export default async function handler(req, res) {
   if (req.method !== 'GET') return res.status(405).end()
 
+  const referer = req.headers.referer || ''
   const origin = req.headers.origin || ''
-  if (origin && !origin.includes('junjohnny.me')) {
-    return res.status(403).end()
-  }
+
+  const isFromSelf =
+    (!origin && !referer) ||
+    origin.includes('junjohnny.me') ||
+    referer.includes('junjohnny.me')
+
+  if (!isFromSelf) return res.status(403).json({ error: 'forbidden' })
 
   const today = new Date().toISOString().slice(0, 10)
 
