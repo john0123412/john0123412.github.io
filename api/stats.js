@@ -11,11 +11,16 @@ export default async function handler(req, res) {
 
   if (!isFromSelf) return res.status(403).json({ error: 'forbidden' })
 
-  const today = new Date().toISOString().slice(0, 10)
+  // Asia/Shanghai (UTC+8) date range: yesterday → today
+  const SHANGHAI_OFFSET_MS = 8 * 60 * 60 * 1000
+  const nowShanghai = new Date(Date.now() + SHANGHAI_OFFSET_MS)
+  const today = nowShanghai.toISOString().slice(0, 10)
+  const yesterday = new Date(nowShanghai.getTime() - 24 * 60 * 60 * 1000)
+    .toISOString().slice(0, 10)
 
   try {
     const r = await fetch(
-      `https://junjohnny.goatcounter.com/api/v0/stats/hits?start=${today}&end=${today}`,
+      `https://junjohnny.goatcounter.com/api/v0/stats/hits?start=${yesterday}&end=${today}`,
       {
         headers: { Authorization: `Bearer ${process.env.GC_TOKEN}` },
         signal: AbortSignal.timeout(3000)
