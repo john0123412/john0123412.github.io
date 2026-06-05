@@ -1,69 +1,168 @@
 <template>
-  <nav class="nav">
-    <div class="nav-brand">Jun Johnny</div>
-    <div class="nav-right">
+  <nav class="nav" :class="{ 'menu-open': isOpen }">
+    <a href="#" class="nav-brand" @click.prevent="scrollToTop">Jun Johnny</a>
+
+    <button
+      class="menu-toggle"
+      type="button"
+      :aria-label="isOpen ? tr.nav.closeMenu : tr.nav.openMenu"
+      :aria-expanded="String(isOpen)"
+      @click="toggleMenu"
+    >
+      <component :is="isOpen ? X : Menu" :size="22" stroke-width="2.2" />
+    </button>
+
+    <div class="nav-panel" :class="{ open: isOpen }">
       <ul class="nav-links">
-        <li><a href="#about">{{ tr.nav.about }}</a></li>
-        <li><a href="#skills">{{ tr.nav.skills }}</a></li>
-        <li><a href="#projects">{{ tr.nav.projects }}</a></li>
-        <li><a href="#links">{{ tr.nav.links }}</a></li>
+        <li v-for="(item, index) in navItems" :key="item.id" :style="{ '--item-index': index }">
+          <a :href="`#${item.id}`" @click="scrollToSection(item.id, $event)">
+            {{ item.label }}
+          </a>
+        </li>
       </ul>
-      <div class="lang-wrapper">
-        <select class="lang-select" :value="lang" @change="e => setLang(e.target.value)" aria-label="Language">
-          <option value="en">EN</option>
-          <option value="zh">简体</option>
-          <option value="zhtw">繁體</option>
-        </select>
+
+      <div class="nav-controls">
+        <div class="lang-toggle" :aria-label="tr.nav.language" role="group">
+          <button
+            v-for="option in languages"
+            :key="option.value"
+            class="lang-option"
+            type="button"
+            :class="{ active: lang === option.value }"
+            :aria-pressed="String(lang === option.value)"
+            @click="setLang(option.value)"
+          >
+            {{ option.label }}
+          </button>
+        </div>
+
+        <button
+          class="theme-btn"
+          type="button"
+          :title="`${tr.nav.theme}: ${themeLabel}`"
+          :aria-label="`${tr.nav.theme}: ${themeLabel}`"
+          @click="cycleTheme"
+        >
+          <component :is="themeIcon" :size="18" stroke-width="2.2" />
+        </button>
       </div>
-      <button class="theme-btn" @click="cycleTheme" :title="'Theme: ' + theme">
-        {{ themeIcon }}
-      </button>
     </div>
   </nav>
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { Menu, Monitor, Moon, Sun, X } from 'lucide-vue-next'
 import { useI18n } from '../composables/useI18n.js'
 
 const { lang, t, setLang } = useI18n()
 const tr = computed(() => t[lang.value])
-
+const isOpen = ref(false)
 const theme = ref('default')
-const themeIcon = ref('💻')
 
-const icons = { default: '💻', light: '☀️', dark: '🌙' }
+const navItems = computed(() => [
+  { id: 'about', label: tr.value.nav.about },
+  { id: 'skills', label: tr.value.nav.skills },
+  { id: 'projects', label: tr.value.nav.projects },
+  { id: 'links', label: tr.value.nav.links },
+])
 
-function applyTheme(t) {
-  theme.value = t
-  themeIcon.value = icons[t]
-  if (t === 'dark') {
+const languages = [
+  { value: 'en', label: 'EN' },
+  { value: 'zh', label: '简' },
+  { value: 'zhtw', label: '繁' },
+]
+
+const themeIcon = computed(() => {
+  if (theme.value === 'light') return Sun
+  if (theme.value === 'dark') return Moon
+  return Monitor
+})
+
+const themeLabel = computed(() => {
+  if (theme.value === 'light') return tr.value.nav.lightTheme
+  if (theme.value === 'dark') return tr.value.nav.darkTheme
+  return tr.value.nav.systemTheme
+})
+
+let systemThemeQuery = null
+
+function closeMenu() {
+  isOpen.value = false
+}
+
+function toggleMenu() {
+  isOpen.value = !isOpen.value
+}
+
+function prefersReducedMotion() {
+  return window.matchMedia('(prefers-reduced-motion: reduce)').matches
+}
+
+function scrollToTop() {
+  window.scrollTo({
+    top: 0,
+    behavior: prefersReducedMotion() ? 'auto' : 'smooth',
+  })
+  closeMenu()
+}
+
+function scrollToSection(id, event) {
+  event.preventDefault()
+  const target = document.getElementById(id)
+  if (!target) return
+  target.scrollIntoView({
+    behavior: prefersReducedMotion() ? 'auto' : 'smooth',
+    block: 'start',
+  })
+  closeMenu()
+}
+
+function applyTheme(nextTheme) {
+  theme.value = nextTheme
+
+  if (nextTheme === 'dark') {
     document.documentElement.setAttribute('data-theme', 'dark')
-  } else if (t === 'light') {
+  } else if (nextTheme === 'light') {
     document.documentElement.removeAttribute('data-theme')
+  } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    document.documentElement.setAttribute('data-theme', 'dark')
   } else {
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
-    if (prefersDark) {
-      document.documentElement.setAttribute('data-theme', 'dark')
-    } else {
-      document.documentElement.removeAttribute('data-theme')
-    }
+    document.documentElement.removeAttribute('data-theme')
   }
-  localStorage.setItem('theme', t)
+
+  localStorage.setItem('theme', nextTheme)
 }
 
 function cycleTheme() {
   const order = ['default', 'light', 'dark']
-  const next = order[(order.indexOf(theme.value) + 1) % 3]
+  const next = order[(order.indexOf(theme.value) + 1) % order.length]
   applyTheme(next)
 }
 
+function handleSystemThemeChange() {
+  if (theme.value === 'default') applyTheme('default')
+}
+
+function handleKeydown(event) {
+  if (event.key === 'Escape') closeMenu()
+}
+
+watch(isOpen, (open) => {
+  document.body.classList.toggle('nav-menu-open', open)
+})
+
 onMounted(() => {
-  const saved = localStorage.getItem('theme') || 'default'
-  applyTheme(saved)
-  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
-    if (theme.value === 'default') applyTheme('default')
-  })
+  applyTheme(localStorage.getItem('theme') || 'default')
+  systemThemeQuery = window.matchMedia('(prefers-color-scheme: dark)')
+  systemThemeQuery.addEventListener('change', handleSystemThemeChange)
+  window.addEventListener('keydown', handleKeydown)
+})
+
+onBeforeUnmount(() => {
+  document.body.classList.remove('nav-menu-open')
+  systemThemeQuery?.removeEventListener('change', handleSystemThemeChange)
+  window.removeEventListener('keydown', handleKeydown)
 })
 </script>
 
@@ -71,77 +170,255 @@ onMounted(() => {
 .nav {
   position: sticky;
   top: 0;
-  background: var(--nav-bg);
-  backdrop-filter: blur(10px);
+  z-index: 200;
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  align-items: center;
-  padding: 1rem 2rem;
-  border-bottom: 1px solid var(--border);
-  z-index: 100;
-}
-.nav-brand {
-  font-weight: 700;
-  font-size: 1.2rem;
-  color: var(--primary);
-}
-.nav-right {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-.nav-links {
-  list-style: none;
-  display: flex;
-  gap: 1.5rem;
-}
-.nav-links a {
-  text-decoration: none;
-  color: var(--text-muted);
-  font-size: 0.9rem;
-  transition: color 0.2s;
-}
-.nav-links a:hover {
-  color: var(--primary);
-}
-.lang-select {
-  background: var(--card-bg);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  padding: 0.4rem 0.5rem;
-  font-size: 0.85rem;
-  color: var(--text);
-  cursor: pointer;
-  transition: border-color 0.2s;
-  appearance: none;
-  -webkit-appearance: none;
-  text-align: center;
-}
-.lang-select:hover, .lang-select:focus {
-  border-color: var(--primary);
-  outline: none;
-}
-.theme-btn {
-  background: var(--card-bg);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  padding: 0.4rem 0.6rem;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: transform 0.2s, border-color 0.2s;
-}
-.theme-btn:hover {
-  transform: scale(1.1);
-  border-color: var(--primary);
+  min-height: var(--nav-height);
+  padding: 0 2rem;
+  background: var(--surface-glass);
+  border-bottom: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-sm);
+  backdrop-filter: blur(16px);
 }
 
-@media (max-width: 600px) {
-  .nav { padding: 0.8rem 1rem; }
-  .nav-links { gap: 0.8rem; }
-  .nav-links a { font-size: 0.8rem; }
+.nav-brand {
+  position: relative;
+  z-index: 2;
+  font-size: 1.08rem;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.nav-brand::after {
+  display: block;
+  width: 42%;
+  height: 3px;
+  margin-top: 8px;
+  content: "";
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+  border-radius: 999px;
+}
+
+.nav-panel {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  list-style: none;
+}
+
+.nav-links a {
+  display: inline-flex;
+  min-height: 40px;
+  align-items: center;
+  padding: 0 0.85rem;
+  font-size: 0.92rem;
+  font-weight: 650;
+  color: var(--text-muted);
+  text-decoration: none;
+  border-radius: 999px;
+  transition:
+    color 0.2s ease,
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.nav-links a:hover {
+  color: var(--text);
+  background: var(--accent-soft);
+  transform: translateY(-1px);
+}
+
+.nav-links a:active,
+.theme-btn:active,
+.lang-option:active,
+.menu-toggle:active {
+  transform: scale(0.96);
+}
+
+.nav-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.lang-toggle {
+  display: inline-grid;
+  grid-template-columns: repeat(3, minmax(42px, 1fr));
+  gap: 3px;
+  padding: 4px;
+  background: rgba(var(--primary-rgb), 0.08);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+}
+
+.lang-option,
+.theme-btn,
+.menu-toggle {
+  border: 0;
+  cursor: pointer;
+}
+
+.lang-option {
+  min-width: 42px;
+  min-height: 34px;
+  padding: 0 0.65rem;
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: var(--text-muted);
+  background: transparent;
+  border-radius: 999px;
+  transition:
+    color 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+.lang-option.active {
+  color: #fff;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  box-shadow: 0 8px 20px -12px rgba(var(--accent-rgb), 0.8);
+}
+
+.theme-btn,
+.menu-toggle {
+  display: inline-flex;
+  width: 42px;
+  height: 42px;
+  align-items: center;
+  justify-content: center;
+  color: var(--text);
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  box-shadow: var(--shadow-sm);
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+.theme-btn:hover,
+.menu-toggle:hover {
+  border-color: rgba(var(--accent-rgb), 0.42);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+.menu-toggle {
+  display: none;
+  position: relative;
+  z-index: 2;
+}
+
+@keyframes menuItemIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 760px) {
+  .nav {
+    padding: 0 1rem;
+  }
+
+  .menu-toggle {
+    display: inline-flex;
+  }
+
+  .nav-panel {
+    position: fixed;
+    top: calc(var(--nav-height) - 1px);
+    right: 12px;
+    left: 12px;
+    display: grid;
+    gap: 1rem;
+    align-items: stretch;
+    padding: 1rem;
+    visibility: hidden;
+    background: var(--surface-glass);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-lg);
+    opacity: 0;
+    backdrop-filter: blur(18px);
+    transform: translateY(-12px);
+    transition:
+      opacity 0.24s ease,
+      transform 0.24s ease,
+      visibility 0.24s ease;
+  }
+
+  .nav-panel.open {
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .nav-links {
+    display: grid;
+    gap: 0.4rem;
+  }
+
+  .nav-links li {
+    opacity: 0;
+  }
+
+  .nav-panel.open .nav-links li {
+    animation: menuItemIn 0.28s ease forwards;
+    animation-delay: calc(var(--item-index) * 55ms);
+  }
+
+  .nav-links a {
+    min-height: 46px;
+    justify-content: center;
+    padding: 0 1rem;
+    color: var(--text);
+    background: rgba(var(--primary-rgb), 0.08);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+  }
+
+  .nav-controls {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0.75rem;
+  }
+
+  .lang-toggle {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .lang-option {
+    min-height: 40px;
+  }
 }
 
 @media (max-width: 380px) {
-  .nav-links { display: none; }
+  .nav-brand {
+    font-size: 1rem;
+  }
+
+  .nav-controls {
+    grid-template-columns: 1fr;
+  }
+
+  .theme-btn {
+    width: 100%;
+  }
 }
 </style>
