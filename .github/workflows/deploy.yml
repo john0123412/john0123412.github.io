@@ -20,6 +20,10 @@ permissions:
   pages: write
   id-token: write
 
+env:
+  # Keep the site build on Node 20.19.0, but run GitHub JavaScript actions on Node 24.
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 concurrency:
   group: pages-${{ github.ref }}
   cancel-in-progress: true
