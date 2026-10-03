@@ -1,120 +1,96 @@
-# 🧑‍💻 jun johnny · portfolio
+# Jun Johnny — Portfolio 2026
 
-[![Live](https://img.shields.io/badge/Live-junjohnny.me-blue?style=flat-square&logo=vercel)](https://junjohnny.me)
-[![Vue 3](https://img.shields.io/badge/Vue-3-42b883?style=flat-square&logo=vue.js)](https://vuejs.org/)
-[![Vite](https://img.shields.io/badge/Vite-8-646cff?style=flat-square&logo=vite)](https://vitejs.dev/)
-[![Vercel](https://img.shields.io/badge/Deployed_on-Vercel-black?style=flat-square&logo=vercel)](https://vercel.com)
-[![Cloudflare](https://img.shields.io/badge/DNS-Cloudflare-f38020?style=flat-square&logo=cloudflare)](https://cloudflare.com)
+**[简体中文](#简体中文)**
 
-**[简体中文](README_CN.md)**
+Personal site of **Jun Johnny** — rewritten around the current research focus:
 
-> Personal portfolio of **Jun Johnny** — CS student & security researcher specializing in AI Agent architecture, penetration testing (Kali Linux), and web security engineering.
+> **Autonomous agents** (PawnLogic) · **Agent security** (pawnlogic-security) · **Offensive security & CTF automation**
 
-🌐 **[junjohnny.me](https://junjohnny.me)**
+🌐 Live target: [junjohnny.me](https://junjohnny.me)
 
 ---
 
-## Stack
+## Design
 
-| Layer | Tech |
+- **Concept** — "PHOSPHOR": terminal-noir research journal. One acid accent (`#D6FF4B`) on near-black, log-style mono microcopy, oversized Syne display type.
+- **Type** — Syne 700/800 (display) · Space Grotesk 300–700 (body) · JetBrains Mono 400/500/700 (log/code). All self-hosted woff2 (latin subset, ~190 KB total), CSP-safe.
+- **Sections** — Boot preloader → interactive "agent network" hero → marquee → Research (3 directions) → PawnLogic flagship with live terminal simulation → Selected work → Stack → Contact.
+- **Motion** — preloader boot log, staggered line reveals, scroll-triggered section reveals, text scramble on nav hover, magnetic-feel hover fills, film grain, custom cursor (fine pointers only). All disabled under `prefers-reduced-motion`.
+
+## Engineering
+
+| Aspect | Choice |
 |---|---|
-| Frontend | Vue 3 + Vite |
-| Styling | CSS custom properties |
-| i18n | Custom composable — EN / 简体中文 / 繁體中文 |
-| Deployment | Vercel (CI/CD on `main` push) |
-| DNS | Cloudflare (DNS Only — CNAME → Vercel) |
-| CDN / SSL | Vercel Edge Network + Automated Let's Encrypt |
-| Domain | [junjohnny.me](https://junjohnny.me) |
+| Stack | Zero dependencies — hand-written HTML / CSS / JS, no build step |
+| i18n | EN / 简体中文 / 繁體中文 via `data-i18n` dictionary (`assets/js/i18n.js`), persisted in `localStorage`, auto-detected from `navigator.language` |
+| Fonts | Self-hosted, `font-display: swap`, preloaded display font |
+| Resilience | Preloader uses time-based rendering + 4 s failsafe (never traps the page); terminal renderer catches up cleanly in throttled tabs; hero title auto-fits any font fallback |
+| CSP | Strict `default-src 'self'` policy in `vercel.json` — the only external hosts allowed are the GoatCounter analytics endpoints |
+| A11y | Semantic landmarks, skip link, focus-visible styles, aria labels, reduced-motion support |
+| QA hook | Append `?qa` to the URL to disable choreography for deterministic full-page rendering |
 
----
-
-## Skills
-
-| Category | Tools |
-|---|---|
-| Languages & Core | C/C++ (OOP), Python, JavaScript, Shell Scripting |
-| Penetration & Security | Kali Linux, Nmap, Metasploit, SQLi, XSS, CSRF, Web Security Labs |
-| AI Agent System | OpenAI-compatible API, Tool Calling, MCP, Local Sandboxed Workflows |
-| Frontend & Dev Env | Vue 3, Vite, TailwindCSS, Linux (WSL), Docker, Git, GitHub Actions |
-
----
-
-## Featured Project
-
-### PawnLogic &nbsp; `🛠️ Active Development`
-
-> A terminal-based AI agent framework engineered for autonomous task execution and sandboxed security workflows.
-
-- **Docker Sandboxing** — Dynamic environment isolation to securely execute agent-generated commands.
-- **Context & Memory** — Local persistent storage for complex, multi-turn technical workflows.
-- **Tool-Use & Automation** — Custom tool schemas for automated file manipulation and network tasks.
-
-`Python` `LLM Tool-Calling` `Docker API` `Linux` `Security`
-
-🔗 [github.com/john0123412/PawnLogic](https://github.com/john0123412/PawnLogic)
-
----
-
-## Security
-
-All security headers are served via Vercel response headers (`vercel.json`), not meta tags.
-
-| Header | Value |
-|---|---|
-| `Content-Security-Policy` | `default-src 'self'` — no external resources |
-| `X-Frame-Options` | `DENY` |
-| `X-Content-Type-Options` | `nosniff` |
-| `Referrer-Policy` | `strict-origin-when-cross-origin` |
-| `Permissions-Policy` | camera, mic, geolocation disabled |
-
-No backend, no forms, no user input. No third-party scripts or tracking.
-
----
-
-## Deployment
-
-```
-GitHub (main) ──push──▶ Vercel CI/CD ──build──▶ Global Edge Network
-                                                       │
-                                          Cloudflare DNS (DNS Only)
-                                          CNAME → Vercel
-                                          SSL: Let's Encrypt (auto)
-```
-
-Every push to `main` triggers `npm run build` on Vercel and deploys to the edge automatically. Cloudflare handles DNS resolution only (grey cloud, no proxy) — all CDN, traffic routing, and SSL are handled entirely by Vercel.
-
----
-
-## Local Development
+## Run
 
 ```bash
-npm install
-npm run dev      # → http://localhost:5173/
-npm run build    # production build → dist/
-npm run preview  # preview build → http://localhost:4173/
+# any static server, e.g.
+python -m http.server 8420
+# → http://localhost:8420
 ```
 
-**WSL — expose to local network:**
+## Deploy
 
-```bash
-npx vite --host
+Two pipelines run from this repo on every push to `main`:
+
+```
+GitHub (main) ──▶ Vercel CI/CD ───────────▶ junjohnny.me (Edge + Let's Encrypt)
+              └─▶ GitHub Actions (static) ─▶ john0123412.github.io (CNAME: junjohnny.me)
 ```
 
-```powershell
-# Windows PowerShell (Admin) — port forward WSL → LAN
-netsh interface portproxy add v4tov4 listenport=5173 listenaddress=0.0.0.0 connectport=5173 connectaddress=<WSL_IP>
-netsh advfirewall firewall add rule name="Vite Dev Server" dir=in action=allow protocol=TCP localport=5173
+`vercel.json` serves the security headers (strict CSP, X-Frame-Options DENY, etc.). The GitHub Actions workflow uploads the static site directly — no build step.
 
-# Cleanup
-netsh interface portproxy delete v4tov4 listenport=5173 listenaddress=0.0.0.0
-netsh advfirewall firewall delete rule name="Vite Dev Server"
+## Structure
+
+```
+index.html              markup · SEO/OG meta · JSON-LD
+vercel.json             security headers (strict CSP)
+CNAME                   GitHub Pages custom domain (junjohnny.me)
+.github/workflows/      static GitHub Pages deploy
+assets/
+  css/style.css         design tokens, layout, motion, i18n & reduced-motion overrides
+  js/i18n.js            EN/zh/zhtw dictionary + language switching
+  js/main.js            preloader, clock, nav, cursor, reveals, scramble, copy cmd, hero fit
+  js/hero-canvas.js     interactive agent-network canvas
+  js/terminal.js        time-driven PawnLogic terminal simulation
+  fonts/*.woff2         Syne · Space Grotesk · JetBrains Mono (latin)
+  favicon.svg
 ```
 
 ---
 
-## Docs
+<a id="简体中文"></a>
+## 简体中文
 
-| File | Description |
-|---|---|
-| `README.md` | This page (English) |
-| `README_CN.md` | 简体中文版 |
+**Jun Johnny 的个人主页**，围绕当前最新研究方向重写：
+
+> **自主智能体**（PawnLogic）· **智能体安全**（pawnlogic-security）· **攻防安全与 CTF 自动化**
+
+### 设计
+
+- **概念** —— 「PHOSPHOR」：终端暗色研究手札。近黑底色 + 单一酸绿强调色（`#D6FF4B`），日志式等宽微文案，超大号 Syne 展示字体。
+- **字体** —— Syne（展示）· Space Grotesk（正文）· JetBrains Mono（日志/代码），全部自托管 woff2（拉丁子集，共约 190 KB），兼容严格 CSP。
+- **区块** —— 开机预加载 → 可交互「Agent 网络」首屏 → 跑马灯 → 研究方向（3 个）→ PawnLogic 旗舰区（实时终端模拟）→ 精选项目 → 技术栈 → 联系。
+
+### 工程
+
+- **零依赖**：纯手写 HTML / CSS / JS，无需构建。
+- **三语**：EN / 简体中文 / 繁體中文，`localStorage` 持久化，自动跟随浏览器语言。
+- **健壮性**：预加载基于时间线渲染 + 4 秒兜底；终端在节流标签页中可追帧；标题在任何字体回退下自动收窄不裁切。
+- **CSP**：与 `vercel.json` 的 `default-src 'self'` 严格策略完全兼容——无内联脚本、无第三方请求。
+- **QA 钩子**：URL 加 `?qa` 可跳过编排动画，用于确定性整页截图。
+
+### 本地预览
+
+```bash
+python -m http.server 8420
+# → http://localhost:8420
+```
