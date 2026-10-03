@@ -1,0 +1,9 @@
+{
+  "name": "junjohnny-portfolio",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Static portfolio of Jun Johnny — no runtime dependencies; build just copies the site into dist/ for Vercel.",
+  "scripts": {
+    "build": "node build.js"
+  }
+}
